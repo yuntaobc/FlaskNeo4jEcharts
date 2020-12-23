@@ -14,8 +14,9 @@ def event_user():
     links = []
 
     # get request data.
-    # eg. {'event_id': 123, 's_time': '2019-12-20T15:29', 'e_time': '2019-12-30T17:30'}
-    _data = {'event_id': 61, 's_time': '2009-07-20T15:29', 'e_time': '2020-12-30T17:30'}
+    # _data = {"event_id": 61, "s_time": "2009-07-20T15:29", "e_time": "2020-12-30T17:30"}
+    _data = json.loads(request.get_data())
+
     # construct Cypher query
     _query = "MATCH (user:User)-[relationship:PARTICIPATE]->(event:Event {event_id: $event_id}) " \
              "WHERE datetime($s_time) <= relationship.time <= datetime($e_time) " \
@@ -51,17 +52,19 @@ def event_topic():
     links = []
 
     # get request data.
-    # eg. {'event_id': 123, 's_time': '2019-12-20T15:29', 'e_time': '2019-12-30T17:30'}
-    _data = {'event_id': 61, 's_time': '2019-12-20T15:29', 'e_time': '2020-12-30T17:30'}
+    # _data = {'event_id': 61, 's_time': '2019-09-20T15:29', 'e_time': '2020-12-30T17:30'}
+    _data = json.loads(request.get_data())
+
     # construct Cypher query
-    _query = "MATCH (event:Event {event_id: $event_id})-[relationship:Produce]->(topic:Topic) " \
+    _query = "MATCH (event:Event {event_id: $event_id})-[relationship:PRODUCE]->(topic:Topic) " \
              "WHERE datetime($s_time) <= relationship.time <= datetime($e_time) " \
              "RETURN event, relationship, topic"
 
     # reorganize query result.
     result = neo4j_db.session.run(_query, _data)
     records = result.values()
-
+    print(_data)
+    print(records)
     # extract event info
     event = {'id': records[0][0].id, 'name': records[0][0].get('name')}
     data.append(event)
@@ -137,11 +140,6 @@ def event_list():
     # get request data.
     _data = json.loads(request.get_data())
     # _data = request.get_data()
-    # data.append(_data)
-    # data.append(request.mimetype)
-    print(_data)
-    print(request.mimetype)
-    # return Response(data)
 
     # eg.
     # _data = {'name': '#An'}
