@@ -14,7 +14,7 @@ def create_app(config_name):
     # config[config_name].init_app(app)
     bootstrap.init_app(app)
     moment.init_app(app)
-    neo4j_db.init_app(app)
+    # neo4j_db.init_app(app)
 
     # register blueprints
     from .main import main as main_blueprint
