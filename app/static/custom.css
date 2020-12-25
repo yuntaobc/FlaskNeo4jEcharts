@@ -1,0 +1,11 @@
+
+.form-item,.form-item-label,.form-item-content-wrapper {
+    display: inline-block;
+}
+.form-item {
+    float: left;
+}
+
+.form-item-content-wrapper {
+    pos
+}
