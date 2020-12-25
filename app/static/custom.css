@@ -1,5 +1,5 @@
 
-.form-item,.form-item-label,.form-item-content-wrapper {
+.form-item,.form-item-label,.form-item-content-wrapper,.form-calender-picker,.form-item-input {
     display: inline-block;
 }
 .form-item {
@@ -7,5 +7,9 @@
 }
 
 .form-item-content-wrapper {
-    pos
+
+}
+
+span.form-calender-picker i {
+    right: 1.7em;
 }

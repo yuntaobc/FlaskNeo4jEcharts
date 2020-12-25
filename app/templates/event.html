@@ -32,17 +32,19 @@
                 <span>Time from:</span>
             </div>
             <div class="form-item-content-wrapper">
-                <span>{{ form.s_time() }}</span>
-                <i class="glyphicon glyphicon-calendar"></i>
+                <span class="form-calender-picker">
+                    <div class="form-item-input">{{ form.e_time() }}</div>
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </span>
             </div>
         </div>
         <div class="form-item">
             <div class="form-item-label">
-                <span>Time from:</span>
+                <span>to</span>
             </div>
             <div class="form-item-content-wrapper">
                 <span class="form-calender-picker">
-                    <div>{{ form.e_time() }}</div>
+                    <div class="form-item-input">{{ form.e_time() }}</div>
                     <i class="glyphicon glyphicon-calendar"></i>
                 </span>
             </div>
