@@ -14,6 +14,12 @@
     <title>Flask Neo4j Echarts - {% block title %}{% endblock %}</title>
     <link rel="icon" href="../static/favicon.ico">
 
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="../static/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="../static/js/bootstrap.min.js"></script>
+    {% block scripts %}
+    {%- endblock scripts %}
 
     {%- block styles %}
     <!-- Bootstrap -->
@@ -35,10 +41,11 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
-                        <a href="event" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                        <a href="event" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
                            aria-expanded="false">Event<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-<!--                            <li class="dropdown-header">Nav header</li>-->
+                            <!--                            <li class="dropdown-header">Nav header</li>-->
                             <li><a href="event/user">Event user</a></li>
                             <li><a href="event/topic">Event topic</a></li>
                             <li><a href="event/info">Event top N topic</a></li>
@@ -65,13 +72,10 @@
     {%- endblock footer %}
 </div> <!-- /container -->
 
-{% block scripts %}
-<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-<script href="../static/jquery.min.js"></script>
-<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-<script href="../static/js/bootstrap.min.js"></script>
-{%- endblock scripts %}
+
 {%- endblock body %}
+
+
 </body>
 {%- endblock html %}
 </html>

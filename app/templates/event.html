@@ -7,6 +7,10 @@
 
 {% block body %}{{ super() }}{% endblock %}
 
+{% block scripts %}
+<script src="../static/query.js"></script>
+{% endblock scripts %}
+
 {% block content %}
 <div class="jumbotron">
     <h1>Event graph</h1>
@@ -33,7 +37,7 @@
             </div>
             <div class="form-item-content-wrapper">
                 <span class="form-calender-picker">
-                    <div class="form-item-input">{{ form.e_time() }}</div>
+                    <div class="form-item-input">{{ form.s_time() }}</div>
                     <i class="glyphicon glyphicon-calendar"></i>
                 </span>
             </div>
@@ -49,14 +53,13 @@
                 </span>
             </div>
         </div>
-
+            <input type="button" id="submit" onclick="event_user()" value="查 询" >
     </form>
 </div>
 <div class="jumbotron">
     <h1>Search result.</h1>
-    <div id="result">
-    </div>
+    <div id="result"></div>
 </div>
 
+{% endblock content %}
 
-{% endblock %}

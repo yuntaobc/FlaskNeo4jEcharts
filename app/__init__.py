@@ -15,7 +15,7 @@ def create_app(config_name):
     app.config['SECRET_KEY'] = 'hard to guess string'
     bootstrap.init_app(app)
     moment.init_app(app)
-    # neo4j_db.init_app(app)
+    neo4j_db.init_app(app)
 
     # register blueprints
     from .main import main as main_blueprint
