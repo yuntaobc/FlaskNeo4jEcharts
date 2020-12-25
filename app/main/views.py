@@ -7,6 +7,21 @@ def index():
     return render_template('index.html')
 
 
+@main.route('/event', methods=['GET', 'POST'])
+def event():
+    return render_template('event.html')
+
+
+@main.route('/user', methods=['GET', 'POST'])
+def user():
+    return render_template('user.html')
+
+
+@main.route('/topic', methods=['GET', 'POST'])
+def topic():
+    return render_template('topic.html')
+
+
 @main.route('/favicon.ico', methods=['GET', 'POST'])
 def image():
     return (
