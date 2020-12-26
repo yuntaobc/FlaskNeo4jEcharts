@@ -7,9 +7,6 @@
 
 {% block body %}{{ super() }}{% endblock %}
 
-{% block scripts %}
-    <script src="../static/query.js"></script>
-{% endblock scripts %}
 
 {% block content %}
 <div class="jumbotron">
@@ -25,9 +22,10 @@
     <form class="form form-horizontal" method="post" role="form">
         <div class="form-item">
             <div class="form-item-label">
-                {{ form.name.label }}
+<!--                {{ form.name.label }}-->
             </div>
             <div class="form-item-content-wrapper">
+                <div id="name-associate" style="display:none"></div>
                 {{ form.name() }}
             </div>
         </div>
@@ -53,13 +51,40 @@
                 </span>
             </div>
         </div>
-            <input type="button" id="submit" onclick="event_user()" value="查 询" >
+        <input type="button" id="submit" onclick="event_user()" value="查 询" >
     </form>
 </div>
 <div class="jumbotron">
     <h1>Search result.</h1>
     <div id="result" style="width: 600px;height:400px;"></div>
 </div>
-
+<script>
+$("#name-input").typeahead({
+    source:function(query, process){
+        var data = JSON.stringify({'name':query});
+        $.ajax({
+            type:"POST",
+            url:"/api/event/list",
+            contentType: "application/json;charset=utf-8",
+            data:data,
+            //dataType:"json",
+            error:function(data){
+               console.log("error")
+               console.log(data);
+            },
+         success:function(data){
+            // data like [{event_id: 33, name: "#anger"},{event_id: 10, name: "#andywarhol"}]
+            // need to display event id
+            data = data[0];
+            process(data);
+          }
+        })// ajax
+    }
+})
+</script>
 {% endblock content %}
 
+{% block scripts %}
+    <script src="../static/bootstrap3-typeahead.min.js"></script>
+    <script src="../static/query.js"></script>
+{% endblock scripts %}

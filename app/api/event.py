@@ -144,7 +144,7 @@ def event_list():
     # eg.
     # _data = {'name': '#An'}
     # construct Cypher query
-    _query = "MATCH (event:Event) WHERE event.name STARTS WITH $name " \
+    _query = "MATCH (event:Event) WHERE event.name CONTAINS $name " \
              "RETURN event LIMIT 20"
 
     # reorganize query result. like:

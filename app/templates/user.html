@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="text" class="typeahead" data-provide="typeahead" id='name-input' autocomplete="off" oninput="cc()">
+<script src="../static/jquery.min.js"></script>
+<script src="../static/bootstrap3-typeahead.min.js"></script>
+
+<script>
+$("#name-input").typeahead({
+    source:function(query, process){
+        var data = JSON.stringify({'name':query});
+        $.ajax({
+            type:"POST",
+            url:"/api/event/list",
+            contentType: "application/json;charset=utf-8",
+            data:data,
+            //dataType:"json",
+            error:function(data){
+               console.log("error")
+               console.log(data);
+            },
+         success:function(data){
+            // data like [{event_id: 33, name: "#anger"},{event_id: 10, name: "#andywarhol"}]
+            // need to display event id
+            data = data[0];
+            process(data);
+          }
+        })// ajax
+    }
+})
+
+
+
+</script>
+</body>
+</html>
