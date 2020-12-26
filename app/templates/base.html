@@ -3,12 +3,12 @@
 <html lang="zh-CN" {% block html_attribs %}{% endblock html_attribs %}>
 {%- block html %}
 <head>
-    {%- block metas %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {%- endblock metas %}
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    {%- block metas %}
+    {%- endblock metas %}
 
     {%- block head %}
     <title>Flask Neo4j Echarts - {% block title %}{% endblock %}</title>
@@ -18,18 +18,24 @@
     <script src="../static/jquery.min.js"></script>
     <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
     <script src="../static/js/bootstrap.min.js"></script>
+    <!-- 引入 ECharts 文件 -->
+    <script src="../static/echarts/echarts.min.js"></script>
+
     {% block scripts %}
     {%- endblock scripts %}
 
-    {%- block styles %}
     <!-- Bootstrap -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/custom.css" rel="stylesheet">
+
+    {%- block styles %}
     {%- endblock styles %}
     {%- endblock head %}
 </head>
 <body {% block body_attribs %}{% endblock body_attribs %}>
 {% block body -%}
+
+<!-- Main component for a primary marketing message or call to action -->
 <div class="container">
     <!-- Static navbar -->
     {% block navbar -%}
@@ -63,7 +69,6 @@
     </nav>
     {%- endblock navbar %}
 
-    <!-- Main component for a primary marketing message or call to action -->
 
     {% block content -%}
     {%- endblock content %}
@@ -71,8 +76,6 @@
     {% block footer -%}
     {%- endblock footer %}
 </div> <!-- /container -->
-
-
 {%- endblock body %}
 
 
