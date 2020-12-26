@@ -18,31 +18,35 @@ function event_user(){
         console.log(data);
      },
      success:function(data){
-        console.log("success")
-//        console.log(typeof(data));
+        console.log("success");
+//        console.log(data);
 //        data_ = JSON.stringify(data)
 //        console.log(typeof(data));
 //        $("#result").text(data_)
         // 基于准备好的dom，初始化echarts实例
+        links = data[1];
+        data = data[0];
+        console.log(data)
+        console.log(links)
         var myChart = echarts.init(document.getElementById('result'));
 
         // 指定图表的配置项和数据
         var option = {
             title: {
-                text: 'ECharts 入门示例'
+                text: 'Event User Relationship'
             },
             tooltip: {},
             legend: {
                 data:['销量']
             },
-            xAxis: {
-                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-            },
-            yAxis: {},
             series: [{
-                name: '销量',
-                type: 'bar',
-                data: [5, 20, 36, 10, 10, 20]
+                type: 'graph',
+                coordinateSystem: null,
+                hoverAnimation: true,
+                layout : 'force',
+                roam : true,
+                data: data,
+                links: links,
             }]
         };
 

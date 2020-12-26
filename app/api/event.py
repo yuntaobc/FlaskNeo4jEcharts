@@ -32,7 +32,7 @@ def event_user():
 
     # extract user, relationship info
     for record in records:
-        link = {'id': record[1].id, 'source': record[1].start_node.id, 'target': record[1].end_node.id,
+        link = {'id': record[1].id, 'source': str(record[1].start_node.id), 'target': str(record[1].end_node.id),
                 'type': record[1].get('type'), 'time': record[1].get('time').iso_format()}
         user = {'id': record[2].id, 'name': record[2].get('name'), 'value': record[2].get('unique_id')}
 
