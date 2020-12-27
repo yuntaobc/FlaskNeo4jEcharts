@@ -16,52 +16,44 @@
     <h1>Event search.</h1>
     <form class="form form-horizontal" method="post" role="form">
         <div class="form-item">
-            <div class="form-item-label">
-                <!-- {{ form.name.label }}-->
-            </div>
             <div class="form-item-content-wrapper">
                 <input id="event-id" type="hidden" value="">
                 {{ form.name() }}
             </div>
         </div>
         <div class="form-item">
-            <div class="form-item-label">
-                <span>Time from:</span>
-            </div>
             <div class="form-item-content-wrapper">
+                <div class="form-item-label">
+                    <span>Time from:</span>
+                </div>
                 <span class="form-calender-picker">
-                     <div class="row">
-                    <div class="form-item-input col-sm-6">{{ form.s_time() }}</div>
+                    <div class="form-item-input row col-sm-6">{{ form.s_time() }}</div>
                     <i class="glyphicon glyphicon-calendar"></i>
-                     </div>
                 </span>
             </div>
         </div>
         <div class="form-item">
-            <div class="form-item-label">
-                <span>to</span>
-            </div>
             <div class="form-item-content-wrapper">
+                <div class="form-item-label">
+                    <span>to</span>
+                </div>
                 <span class="form-calender-picker">
-                    <div class="row">
-                        <div class="form-item-input col-sm-6">{{ form.e_time() }}</div>
+                        <div class="form-item-input row col-sm-6">{{ form.e_time() }}</div>
                         <i class="glyphicon glyphicon-calendar"></i>
-                    </div>
                 </span>
             </div>
         </div>
         <input type="button" id="submit" onclick="event_user()" value="查 询" >
     </form>
+    <script>
+        $(function() {
+            event_user_page();
+        });
+    </script>
 </div>
 <div class="jumbotron">
-    <h1>Search result.</h1>
-    <div id="result" style="width: 1000px;height:500px;"></div>
+    <h2>Search result.</h2>
+    <div id="result" class="row" style="height:500px;"></div>
 </div>
-<script>
-$(function() {
-    event_user_page();
-});
-
-</script>
 {% endblock content %}
 
