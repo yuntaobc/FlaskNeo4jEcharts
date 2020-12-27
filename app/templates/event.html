@@ -35,8 +35,10 @@
             </div>
             <div class="form-item-content-wrapper">
                 <span class="form-calender-picker">
-                    <div class="form-item-input">{{ form.s_time() }}</div>
+                     <div class="row">
+                    <div class="form-item-input col-sm-6">{{ form.s_time() }}</div>
                     <i class="glyphicon glyphicon-calendar"></i>
+                     </div>
                 </span>
             </div>
         </div>
@@ -46,8 +48,10 @@
             </div>
             <div class="form-item-content-wrapper">
                 <span class="form-calender-picker">
-                    <div class="form-item-input">{{ form.e_time() }}</div>
+                     <div class="row">
+                    <div class="form-item-input col-sm-6">{{ form.e_time() }}</div>
                     <i class="glyphicon glyphicon-calendar"></i>
+                     </div>
                 </span>
             </div>
         </div>
@@ -81,7 +85,8 @@ $("#name-input").typeahead({
         })// ajax
     }
 })
-
+$('#datetimepicker1').datetimepicker();
+$('#datetimepicker2').datetimepicker();
 </script>
 {% endblock content %}
     <script src="/static/query.js"></script>
