@@ -63,9 +63,11 @@
 </div>
 <div class="jumbotron">
     <h1>Search result.</h1>
-    <div id="result" style="width: 600px;height:400px;"></div>
+    <div id="result" style="width: 1000px;height:500px;"></div>
 </div>
 <script>
+
+
 $("#name-input").typeahead({
     source:function(query, process){
         var data = JSON.stringify({'name':query});
@@ -94,7 +96,7 @@ $("#name-input").typeahead({
 $("#name-input").change(function() {
   var current = $("#name-input").typeahead("getActive");
   if (current) {
-    console.log(current)
+    // console.log(current)
     $("#event-id").val(current.event_id);
     // Some item from your model is active!
     if (current.name == $("#name-input").val()) {
