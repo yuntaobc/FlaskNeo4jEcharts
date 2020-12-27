@@ -48,6 +48,28 @@ def user_event():
     return Response(json.dumps(response), mimetype="application/json")
 
 
+@api.route('/user/neighbor', methods=['GET', 'POST'])
+def user_neighbor():
+    # func: find N level neighbor with specific user
+    # response
+    data = []
+    links = []
+
+    # receive request data
+    # _data = {'user_id': 322, 'level': 2}
+    _data = json.loads(request.get_data())
+
+    # construct Cypher query
+
+    _query = "MATCH (user:User {user_id: $user_id})-[relationship:Join]->(user:User)"
+
+    # reorganize results
+
+    # return Json data
+
+    return
+
+
 @api.route('/user/info', methods=['GET', 'POST'])
 def user_info():
     # func: find top N topic that specific user
@@ -80,28 +102,6 @@ def user_info():
     # return Json data
     response = [data, links]
     return Response(json.dumps(response), mimetype="application/json")
-
-
-@api.route('/user/neighbor', methods=['GET', 'POST'])
-def user_neighbor():
-    # func: find N level neighbor with specific user
-    # response
-    data = []
-    links = []
-
-    # receive request data
-    # _data = {'user_id': 322, 'level': 2}
-    _data = json.loads(request.get_data())
-
-    # construct Cypher query
-
-    _query = "MATCH (user:User {user_id: $user_id})-[relationship:Join]->(user:User)"
-
-    # reorganize results
-
-    # return Json data
-
-    return
 
 
 @api.route('/user/list', methods=['GET', 'POST'])

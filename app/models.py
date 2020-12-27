@@ -19,3 +19,6 @@ class Neo4jSession():
 
     def get_session(self):
         return self.session
+
+# TODO: define node model: event, user, topic?
+#       in each model, define their cypher sentence

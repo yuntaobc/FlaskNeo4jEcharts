@@ -5,6 +5,10 @@ from flask import Flask, g, Response, request
 # from ..models import neo4j_session
 import json
 
+CATEGORY_EVENT = 0
+CATEGORY_USER = 1
+CATEGORY_TOPIC = 1
+
 
 @api.route('/event/user', methods=['GET', 'POST'])
 def event_user():
@@ -27,14 +31,14 @@ def event_user():
     records = result.values()
 
     # extract event info
-    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': 0}
+    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
     data.append(event)
 
     # extract user, relationship info
-    for record in records:
-        link = {'id': record[1].id, 'source': str(record[1].start_node.id), 'target': str(record[1].end_node.id),
-                'type': record[1].get('type'), 'time': record[1].get('time').iso_format()}
-        user = {'id': record[2].id, 'name': record[2].get('name'), 'value': record[2].get('unique_id'), 'category': 1}
+    for r in records:
+        link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
+                'type': r[1].get('type'), 'time': r[1].get('time').iso_format()}
+        user = {'id': r[2].id, 'name': r[2].get('name'), 'value': r[2].get('unique_id'), 'category': CATEGORY_USER}
 
         links.append(link)
         if data.count(user) == 0: data.append(user)
@@ -63,17 +67,50 @@ def event_topic():
     # reorganize query result.
     result = neo4j_db.session.run(_query, _data)
     records = result.values()
-    print(_data)
-    print(records)
+
     # extract event info
-    event = {'id': records[0][0].id, 'name': records[0][0].get('name')}
+    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
     data.append(event)
 
     # extract topic, relationship info
     for record in records:
         link = {'id': record[1].id, 'source': record[1].start_node.id, 'target': record[1].end_node.id,
                 'time': record[1].get('time').iso_format()}
-        topic = {'id': record[2].id, 'name': record[2].get('topic_name')}
+        topic = {'id': record[2].id, 'name': record[2].get('name'), 'category': CATEGORY_TOPIC}
+
+        links.append(link)
+        if data.count(topic) == 0: data.append(topic)
+
+    # return Json data
+    response = [data, links]
+    return Response(json.dumps(response), mimetype="application/json")
+
+
+@api.route('/event/info', methods=['GET', 'POST'])
+def event_neighbor():
+    # response DID NOT TEST
+    data = []
+    links = []
+
+    # get request data.
+    # eg. {'event_id': 123, 'level': 2}
+    _data = {'event_id': 123, 'level': 2}
+    # construct Cypher query
+    _query = "MATCH (event1:Event {event_id:$event_id})-[r:COOCCURENCE *$level..$level]-(event2:Event) " \
+             "RETURN event1,r,event2 "
+
+    # reorganize query result.
+    result = neo4j_db.session.run(_query, _data)
+    records = result.values()
+
+    # extract event info
+    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
+    data.append(event)
+    # reorganize query result. like:
+    for record in records:
+        link = {'id': record[1].id, 'source': record[1].start_node.id, 'target': record[1].end_node.id,
+                'time': record[1].get('time').iso_format(), 'type': record[1].get('type')}
+        topic = {'id': record[2].id, 'name': record[2].get('name'), 'category': CATEGORY_TOPIC}
 
         links.append(link)
         if data.count(topic) == 0: data.append(topic)
@@ -92,42 +129,27 @@ def event_info():
 
     # get request data.
     # eg. {'event_id': 123}
-    _data = {'event_id': 123}
+    _data = {'event_id': 5, 'number': 20, 'e_time': '2019-09-29T15:29'}
     # construct Cypher query
     _query = "MATCH (event:Event {event_id: $event_id})-[relationship:Produce]->(topic:Topic) " \
-             "RETURN event, relationship, topic"
+             "WHERE relationship.time <= datetime($e_time) " \
+             "RETURN topic " \
+             "ORDER BY topic.count " \
+             "LIMIT $number "
 
     # reorganize query result. like:
     result = neo4j_db.session.run(_query, _data)
     records = result.values()
 
     # extract event info
-    event = {'id': records[0][0].id, 'name': records[0][0].get('name')}
-    data.append(event)
+    # event = {'id': records[0][0].id, 'name': records[0][0].get('name')}
+    # data.append(event)
 
     # extract topic
-    # how to organize topic? a table?
+    # return a table
 
     # return Json data
-    response = [data, links]
-    return Response(json.dumps(response), mimetype="application/json")
-
-
-@api.route('/event/info', methods=['GET', 'POST'])
-def event_neighbor():
-    # response
-    data = []
-    links = []
-
-    # get request data.
-    # eg. {'event_id': 123, 'level': 2}
-    _data = {'event_id': 123, 'level': 2}
-    # construct Cypher query
-
-    # reorganize query result. like:
-
-    # return Json data
-    response = [data, links]
+    response = [data]
     return Response(json.dumps(response), mimetype="application/json")
 
 
@@ -145,7 +167,7 @@ def event_list():
     # _data = {'name': '#An'}
     # construct Cypher query
     _query = "MATCH (event:Event) WHERE event.name CONTAINS $name " \
-             "RETURN event LIMIT 20"
+             "RETURN event LIMIT 10"
 
     # reorganize query result. like:
     result = neo4j_db.session.run(_query, _data)
