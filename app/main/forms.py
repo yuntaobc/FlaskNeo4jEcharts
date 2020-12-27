@@ -13,10 +13,10 @@ class EventUserForm(FlaskForm):
                            'data-provide': 'typeahead'})
     s_time = DateTimeField(format='%Y-%m-%dT%H:%M:%S',
                            render_kw={
-                               'id': 'datetimepicker1'
+                               'id': 's-time'
                            })
     e_time = DateTimeField(format='%Y-%m-%dT%H:%M:%S',
                            render_kw={
-                               'id': 'datetimepicker2'
+                               'id': 'e-time'
                            })
     submit = SubmitField("Search")

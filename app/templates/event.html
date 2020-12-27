@@ -7,6 +7,9 @@
 
 {% block body %}{{ super() }}{% endblock %}
 
+{% block scripts %}
+    <script src="/static/query.js"></script>
+{% endblock scripts %}
 
 {% block content %}
 <div class="jumbotron">
@@ -25,7 +28,7 @@
 <!--                {{ form.name.label }}-->
             </div>
             <div class="form-item-content-wrapper">
-                <div id="name-associate" style="display:none"></div>
+                <input id="event-id" type="hidden" value="">
                 {{ form.name() }}
             </div>
         </div>
@@ -81,14 +84,36 @@ $("#name-input").typeahead({
             // need to display event id
             data = data[0];
             process(data);
-          }
+          }// success
         })// ajax
-    }
+    },//source
+    displayText:function(item){
+	    return item.name;
+	}
 })
-$('#datetimepicker1').datetimepicker();
-$('#datetimepicker2').datetimepicker();
+$("#name-input").change(function() {
+  var current = $("#name-input").typeahead("getActive");
+  if (current) {
+    console.log(current)
+    $("#event-id").val(current.event_id);
+    // Some item from your model is active!
+    if (current.name == $("#name-input").val()) {
+      // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+    } else {
+      // This means it is only a partial match, you can either add a new item
+      // or take the active if you don't want new items
+    }
+  } else {
+    // Nothing is active so it is a new value (or maybe empty value)
+  }
+});
+
+$('#s-time').datetimepicker({
+    format: 'YYYY-MM-DD HH:MM'
+});
+$('#e-time').datetimepicker({
+    format: 'YYYY-MM-DD HH:MM'
+});
 </script>
 {% endblock content %}
-    <script src="/static/query.js"></script>
-{% block scripts %}
-{% endblock scripts %}
+

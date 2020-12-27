@@ -1,11 +1,11 @@
 function event_user(){
-    var event_id = $("#event_id").val();
-    var event_id = 61;
+    var event_id = Number($("#event-id").val());
+    var s_time = $("#s-time").val().replace(" ", "T");
+    var e_time = $("#e-time").val().replace(" ", "T");
 
-    var s_time = $("#s_time").val();
-    var e_time = $("#e_time").val();
     var data = {"event_id":event_id, "s_time":s_time, "e_time":e_time};
     var data = JSON.stringify(data);
+    console.log(data)
 
     $.ajax({
      type:"POST",
