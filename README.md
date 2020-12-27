@@ -22,26 +22,31 @@
 
 
 #### 配置Neo4j
-  
+
+
 安装python环境：
   ```bash 
     pip3 install neo4j
     Installing collected packages: neo4j
     Successfully installed neo4j-4.2.0
   ```
-修改配置,更改import路径
- /etc/neo4j/neo4j.conf
 
-取消下面的注释
 
- `dbms.security.allow_csv_import_from_file_urls=true`
+修改配置,更改import路径(Didn't use)
+- /etc/neo4j/neo4j.conf
 
-变更路径
+- 取消下面的注释
 
- `# dbms.directories.import=/var/lib/neo4j/import`
- `dbms.directories.import=/home/yuntaobc/neoimport`
+    `dbms.security.allow_csv_import_from_file_urls=true`
+
+- 变更路径
+
+    `# dbms.directories.import=/var/lib/neo4j/import`
+ 
+    `dbms.directories.import=/home/yuntaobc/neoimport`
 
 创建新的数据库
+
  - 默认用户neo4j没有管理员权限 没用
    https://neo4j.com/docs/operations-manual/4.1/configuration/password-and-user-recovery/#recover-unassigned-admin-role
  - 使用一个hack方法
@@ -52,6 +57,7 @@
 把数据文件放到自定义的目录下面
 使用neo4j-admin工具倒入
 示例
+
 ```cypher
 neo4j-admin import \
      --database order \
@@ -83,9 +89,24 @@ ERROR neo4j database "twitter" is unavailable, its status is "unknown."
 ### 编写后端查询API
 
 测试查询语句
+
+```Cypher
 match p=(u:User)-[r:PARTICIPATE]-(e:Event {event_id:24}) where datetime('20190928T0500') < r.time < datetime('20190928T2000') return u,e,r
 
 match p=(u:User)-[r:PARTICIPATE]-(e:Event {event_id:24})  return u,e,r
 
 match (u:User {user_id:53})-[r:PARTICIPATE]-(e:Event) with e.event_id as ID, e.event_name as Name, size(collect(e.event_name)) as Times return ID,Name,Times order by Times DESC
+```
+
+### Front Content
+
+USE this things:
+- flask_bootstrap
+- flask_wtf
+- bootstrap-3-typeahead
+- getdatepicker
+- bootstrap
+- jQuery
+- Echarts
+
 

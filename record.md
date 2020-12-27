@@ -22,6 +22,7 @@ neo4j-admin import \
      --relationships=COOCCURENCE=event_event.csv \
      --relationships=PARTICIPATE=event_user.csv \
      --trim-strings=true
+
 ```
 
 
@@ -89,7 +90,7 @@ links: [{
 ```
 
 
-#### Import all data
+#### Import all Test data
 
 ```bash
 neo4j-admin import \
@@ -105,3 +106,31 @@ neo4j-admin import \
      --relationships=INTERACT=user_user.csv \
      --trim-strings=true
 ```
+
+
+### 最终数据导入
+
+```
+./neo4j-admin import \
+     --database twitter \
+     --id-type=INTEGER \
+     --nodes=Event=event.csv \
+     --nodes=User=user.csv \
+     --nodes=Topic=topic.csv \
+     --relationships=COOCCURENCE=event_event.csv \
+     --relationships=PARTICIPATE=event_user.csv \
+     --relationships=PRODUCE=event_topic.csv \
+     --relationships=INTERACT=user_user.csv \
+     --relationships=JOIN=user_topic.csv \
+     --relationships=RELATED=topic_topic.csv \
+     --trim-strings=true
+```
+#### Problems
+
+1. 与话题相关的表的时间格式
+
+2. 用户表里的id字段有nan
+
+3. user表有未处理的数据
+
+#### Directory
