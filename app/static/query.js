@@ -95,3 +95,40 @@ function event_user(){
         myChart.setOption(option);
      }});
 }
+function event_user_page(){
+    $("#name-input").typeahead({
+        source:function(query, process){
+            var data = JSON.stringify({'name':query});
+            $.ajax({
+                type:"POST",
+                url:"/api/event/list",
+                contentType: "application/json;charset=utf-8",
+                data:data,
+                //dataType:"json",
+                error:function(data){
+                   console.log("error")
+                   console.log(data);
+                },
+             success:function(data){
+                data = data[0];
+                process(data);
+              }// success
+            })// ajax
+        },//source
+        displayText:function(item){
+            return item.name;
+        }
+    });
+    $("#name-input").change(function() {
+      var current = $("#name-input").typeahead("getActive");
+      if (current) {
+        // console.log(current)
+        $("#event-id").val(current.event_id);
+    }});
+    $('#s-time').datetimepicker({
+        format: 'YYYY-MM-DD HH:MM'
+    });
+    $('#e-time').datetimepicker({
+        format: 'YYYY-MM-DD HH:MM'
+    });
+}

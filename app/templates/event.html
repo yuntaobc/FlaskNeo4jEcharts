@@ -25,7 +25,7 @@
     <form class="form form-horizontal" method="post" role="form">
         <div class="form-item">
             <div class="form-item-label">
-<!--                {{ form.name.label }}-->
+                <!-- {{ form.name.label }}-->
             </div>
             <div class="form-item-content-wrapper">
                 <input id="event-id" type="hidden" value="">
@@ -51,10 +51,10 @@
             </div>
             <div class="form-item-content-wrapper">
                 <span class="form-calender-picker">
-                     <div class="row">
-                    <div class="form-item-input col-sm-6">{{ form.e_time() }}</div>
-                    <i class="glyphicon glyphicon-calendar"></i>
-                     </div>
+                    <div class="row">
+                        <div class="form-item-input col-sm-6">{{ form.e_time() }}</div>
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </div>
                 </span>
             </div>
         </div>
@@ -66,56 +66,10 @@
     <div id="result" style="width: 1000px;height:500px;"></div>
 </div>
 <script>
-
-
-$("#name-input").typeahead({
-    source:function(query, process){
-        var data = JSON.stringify({'name':query});
-        $.ajax({
-            type:"POST",
-            url:"/api/event/list",
-            contentType: "application/json;charset=utf-8",
-            data:data,
-            //dataType:"json",
-            error:function(data){
-               console.log("error")
-               console.log(data);
-            },
-         success:function(data){
-            // data like [{event_id: 33, name: "#anger"},{event_id: 10, name: "#andywarhol"}]
-            // need to display event id
-            data = data[0];
-            process(data);
-          }// success
-        })// ajax
-    },//source
-    displayText:function(item){
-	    return item.name;
-	}
-})
-$("#name-input").change(function() {
-  var current = $("#name-input").typeahead("getActive");
-  if (current) {
-    // console.log(current)
-    $("#event-id").val(current.event_id);
-    // Some item from your model is active!
-    if (current.name == $("#name-input").val()) {
-      // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
-    } else {
-      // This means it is only a partial match, you can either add a new item
-      // or take the active if you don't want new items
-    }
-  } else {
-    // Nothing is active so it is a new value (or maybe empty value)
-  }
+$(function() {
+    event_user_page();
 });
 
-$('#s-time').datetimepicker({
-    format: 'YYYY-MM-DD HH:MM'
-});
-$('#e-time').datetimepicker({
-    format: 'YYYY-MM-DD HH:MM'
-});
 </script>
 {% endblock content %}
 
