@@ -221,6 +221,24 @@ function event_info() {
     show_table(result);
 }
 
+function user_event() {
+    var myChart = echarts.init(document.getElementById('result'));
+    myChart.showLoading();
+
+    var user_id = Number($("#user-id").val());
+    var s_time = $("#s-time").val().replace(" ", "T");
+    var e_time = $("#e-time").val().replace(" ", "T");
+
+    var data = {"user_id":user_id, "s_time":s_time, "e_time":e_time};
+    data = JSON.stringify(data);
+
+    var url = '/api/user/event';
+    var meta = {'title':'User Event Relationship', };
+    var result = send_ajax(url, data);
+
+    show_echarts(myChart, result, meta);
+
+}
 
 function event_user_page(){
     $("#name-input").typeahead({
@@ -233,7 +251,7 @@ function event_user_page(){
                 data:data,
                 //dataType:"json",
                 error:function(data){
-                   console.log("Get #name-input typeahead false.")
+                   console.log("False get #name-input typeahead.")
                 },
                 success:function(data){
                     data = data[0];
@@ -246,6 +264,44 @@ function event_user_page(){
       var current = $("#name-input").typeahead("getActive");
       if (current) {
         $("#event-id").val(current.event_id);
+    }});
+    if($('#s-time') != null ){
+        $('#s-time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+        });
+    }
+    if($('#e-time') != null){
+        $('#e-time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+        });
+    }
+}
+
+
+function user_event_page(){
+    $("#name-input").typeahead({
+        source:function(query, process){
+            var data = JSON.stringify({'name':query});
+            $.ajax({
+                type:"POST",
+                url:"/api/user/list",
+                contentType: "application/json;charset=utf-8",
+                data:data,
+                //dataType:"json",
+                error:function(data){
+                   console.log("False get #name-input typeahead.")
+                },
+                success:function(data){
+                    console.log("Success get #name-input typeahead.");
+                    process(data);
+                }// success
+            })// ajax
+        },//source
+    });
+    $("#name-input").change(function() {
+      var current = $("#name-input").typeahead("getActive");
+      if (current) {
+        $("#user-id").val(current.user_id);
     }});
     if($('#s-time') != null ){
         $('#s-time').datetimepicker({
