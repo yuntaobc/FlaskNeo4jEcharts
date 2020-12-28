@@ -292,6 +292,24 @@ function user_info() {
     show_table(result);
 }
 
+function topic_neighbor() {
+    var myChart = echarts.init(document.getElementById('result'));
+    myChart.showLoading();
+
+    var topic_id = Number($("#topic-id").val());
+    var level = Number($("#level").val());
+    var limit = Number($("#limit").val());
+
+    var data = {"topic_id":topic_id, "level": parseInt(level), 'limit': parseInt(limit)};
+    data = JSON.stringify(data);
+
+    var url = '/api/topic/neighbor';
+    var meta = {'title':'Topic neighbor', };
+    var result = send_ajax(url, data);
+
+    show_echarts(myChart, result, meta);
+}
+
 function event_user_page(){
     $("#name-input").typeahead({
         source:function(query, process){
@@ -365,4 +383,31 @@ function user_event_page(){
             format: 'YYYY-MM-DD HH:mm',
         });
     }
+}
+
+function topic_page(){
+    $("#name-input").typeahead({
+        source:function(query, process){
+            var data = JSON.stringify({'name':query});
+            $.ajax({
+                type:"POST",
+                url:"/api/topic/list",
+                contentType: "application/json;charset=utf-8",
+                data:data,
+                //dataType:"json",
+                error:function(data){
+                   console.log("False get #name-input typeahead.")
+                },
+                success:function(data){
+                    console.log("Success get #name-input typeahead.")
+                    process(data[0]);
+                }// success
+            })// ajax
+        },//source
+    });
+    $("#name-input").change(function() {
+      var current = $("#name-input").typeahead("getActive");
+      if (current) {
+        $("#topic-id").val(current.topic_id);
+    }});
 }
