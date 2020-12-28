@@ -11,7 +11,7 @@
     {%- endblock metas %}
 
     {%- block head %}
-    <title>Flask Neo4j Echarts - {% block title %}{% endblock %}</title>
+    <title>Graph {% block title %}{% endblock %}</title>
     <link rel="icon" href="/static/static/favicon.ico">
 
     <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
@@ -62,10 +62,10 @@
                        aria-expanded="false">Event<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <!--<li class="dropdown-header">Nav header</li>-->
-                        <li><a href="event/user">Event user</a></li>
-                        <li><a href="event/topic">Event topic</a></li>
-                        <li><a href="event/info">Event top N topic</a></li>
-                        <li><a href="event/neighbor">Event neighbor</a></li>
+                        <li><a href="/event/user">Event user</a></li>
+                        <li><a href="/event/topic">Event topic</a></li>
+                        <li><a href="/event/info">Event top N topic</a></li>
+                        <li><a href="/event/neighbor">Event neighbor</a></li>
                     </ul>
                 </li>
                 <li><a href="user">User</a></li>

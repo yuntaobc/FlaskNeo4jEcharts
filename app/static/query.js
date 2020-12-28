@@ -1,5 +1,4 @@
 
-
 function show_echarts(myChart, data, meta){
     // 基于准备好的dom，初始化echarts实例
     links = data[1];
@@ -103,6 +102,28 @@ function show_echarts(myChart, data, meta){
     myChart.setOption(option);
 }
 
+
+function send_ajax(url, data){
+    var result;
+    $.ajax({
+        url: url,
+        data: data,
+        type: "POST",
+        async: false,
+        contentType: "application/json;charset=utf-8",
+        // dataType:"json",
+        error:function(data){
+            console.log("Function event_user() can not get data from server.");
+        },
+        success:function(data){
+            console.log("Function event_user() get data from server successful.");
+            result = data;
+        }
+     });
+    return result;
+}
+
+
 function event_user(){
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
@@ -112,24 +133,15 @@ function event_user(){
     var e_time = $("#e-time").val().replace(" ", "T");
 
     var data = {"event_id":event_id, "s_time":s_time, "e_time":e_time};
-    var data = JSON.stringify(data);
+    data = JSON.stringify(data);
 
+    var url = '/api/event/user';
     var meta = {'title':'Event User Relationship', };
+    var result = send_ajax(url, data);
 
-    $.ajax({
-     type:"POST",
-     url:"/api/event/user",
-     contentType: "application/json;charset=utf-8",
-     data:data,
-     // dataType:"json",
-     error:function(data){
-        console.log("Function event_user() can not get data from server.");
-     },
-     success:function(data){
-        console.log("Function event_user() get data from server successful.");
-        show_echarts(myChart, data, meta);
-     }});
+    show_echarts(myChart, result, meta);
 }
+
 function event_user_page(){
     $("#name-input").typeahead({
         source:function(query, process){
