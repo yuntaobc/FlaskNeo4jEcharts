@@ -1,5 +1,5 @@
 from flask import render_template, session, redirect, url_for
-from .forms import EventUserForm
+from .forms import EventForm
 from . import main
 
 
@@ -11,8 +11,18 @@ def index():
 @main.route('/event/<item>', methods=['GET', 'POST'])
 def event(item):
     if item == 'user':
-        form = EventUserForm()
-        return render_template('event.html', form=form)
+        page = 'event_user.html'
+        form = EventForm()
+    elif item == 'topic':
+        page = 'event_topic.html'
+        form = EventForm()
+    elif item == 'neighbor':
+        page = 'event_neighbor.html'
+        form = EventForm()
+    elif item == 'info':
+        page = 'event_info.html'
+        form = ''
+    return render_template(page, form=form)
 
 
 @main.route('/user', methods=['GET', 'POST'])

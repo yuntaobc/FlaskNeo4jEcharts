@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DateTimeField, SubmitField
 
 
-class EventUserForm(FlaskForm):
+class EventForm(FlaskForm):
     name = StringField("Event name to search",
                        render_kw={
                            'placeholder': 'Event name to search',
