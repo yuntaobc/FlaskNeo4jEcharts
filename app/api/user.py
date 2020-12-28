@@ -5,6 +5,10 @@ from flask import Flask, g, Response, request
 # from ..models import neo4j_session
 import json
 
+CATEGORY_EVENT = 0
+CATEGORY_USER = 1
+CATEGORY_TOPIC = 2
+
 
 @api.route('/user/event', methods=['GET', 'POST'])
 def user_event():
@@ -31,14 +35,15 @@ def user_event():
     records = result.values()
 
     # extract user node, which needs only one
-    user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id')}
+    user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id'),
+            'category': CATEGORY_USER}
     data.append(user)
 
     # extract relationship and events
-    for record in records:
-        link = {'id': record[1].id, 'source': record[1].start_node.id, 'target': record[1].end_node.id,
-                'type': record[1].get('type'), 'time': record[1].get('time').iso_format()}
-        event = {'id': record[2].id, 'name': record[2].get('name')}
+    for r in records:
+        link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
+                'type': r[1].get('type'), 'time': r[1].get('time').iso_format(), 'category': r[1].type}
+        event = {'id': r[2].id, 'name': r[2].get('name'), 'category': CATEGORY_EVENT}
 
         links.append(link)
         if data.count(event) == 0: data.append(event)
@@ -115,8 +120,8 @@ def user_list():
     _data = json.loads(request.get_data())
 
     # construct Cypher query
-    _query = "MATCH (user:User) WHERE user.name STARTS WITH $name " \
-             "RETURN user ORDER BY user.name ASC LIMIT 20"
+    _query = "MATCH (user:User) WHERE user.name CONTAINS $name " \
+             "RETURN user LIMIT 10"
 
     # reorganize results
     result = neo4j_db.session.run(_query, parameters=_data)
