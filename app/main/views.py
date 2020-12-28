@@ -22,14 +22,26 @@ def event(item):
     return render_template(page, form=form)
 
 
-@main.route('/user', methods=['GET', 'POST'])
-def user():
-    return render_template('user.html')
+@main.route('/user/<item>', methods=['GET', 'POST'])
+def user(item):
+    form = EventForm()
+    if item == 'event':
+        page = 'user_event.html'
+    elif item == 'topic':
+        page = 'user_topic.html'
+    elif item == 'neighbor':
+        page = 'user_neighbor.html'
+    elif item == 'info':
+        page = 'user_info.html'
+    return render_template(page, form=form)
 
 
-@main.route('/topic', methods=['GET', 'POST'])
-def topic():
-    return render_template('topic.html')
+@main.route('/topic/<item>', methods=['GET', 'POST'])
+def topic(item):
+    form = EventForm()
+    if item == 'neighbor':
+        page = 'topic_neighbor.html'
+    return render_template(page, form=form)
 
 
 @main.route('/favicon.ico', methods=['GET', 'POST'])
