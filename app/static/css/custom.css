@@ -31,3 +31,7 @@ span.form-calender-picker i {
     margin-left: 0px;
     min-height:650px;
 }
+
+th {
+    padding: 7px;
+}
