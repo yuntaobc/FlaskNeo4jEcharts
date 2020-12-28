@@ -58,18 +58,34 @@
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true"
-                       aria-expanded="false">Event<span class="caret"></span></a>
+                       aria-haspopup="true" aria-expanded="false">Event<span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu">
-                        <!--<li class="dropdown-header">Nav header</li>-->
                         <li><a href="/event/user">Event user</a></li>
                         <li><a href="/event/topic">Event topic</a></li>
                         <li><a href="/event/neighbor">Event neighbor</a></li>
                         <li><a href="/event/info">Event top N topic</a></li>
                     </ul>
                 </li>
-                <li><a href="user">User</a></li>
-                <li><a href="topic">Topic</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">User<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                            <li><a href="/user/event">User event</a></li>
+                            <li><a href="/user/topic">User topic</a></li>
+                            <li><a href="/user/neighbor">User neighbor</a></li>
+                            <li><a href="/user/info">User top N topic</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">Topic<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                            <li><a href="/topic/neighbor">Topic neighbor</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="./">About<span class="sr-only">(current)</span></a></li>
