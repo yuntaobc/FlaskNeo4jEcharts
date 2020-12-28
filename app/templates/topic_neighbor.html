@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf%}
+
+{% block title %}Topic-neighbor{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h2>Topic's n level neighbor.</h2>
+    <form class="form form-horizontal" method="post" role="form">
+        <div class="form-item">
+            <div class="form-item-content-wrapper">
+                <input id="topic-id" type="hidden" value="">
+                {{ form.name() }}
+            </div>
+        </div>
+        <div class="form-item">
+            <div class="form-item-content-wrapper">
+                <div class="form-item-label">
+                    <span> Level:</span>
+                </div>
+                <span class="form-calender-picker">
+                    <div class="form-item-input row col-sm-6">
+                        <input id="level" name="level" type="text" value="1" placeholder="1">
+                    </div>
+                    <i class="glyphicon glyphicon-dashboard"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-item">
+            <div class="form-item-content-wrapper">
+                <div class="form-item-label">
+                    <span>Limit:</span>
+                </div>
+                <span class="form-calender-picker">
+                    <div class="form-item-input row col-sm-6">
+                        <input id="limit" name="limit" type="text" value="30" placeholder="30">
+                    </div>
+                    <i class="glyphicon glyphicon-dashboard"></i>
+                </span>
+            </div>
+        </div>
+        <input type="button" id="submit" onclick="topic_neighbor()" value="查 询" >
+    </form>
+    <script>
+        $(function() {
+            topic_page();
+        });
+    </script>
+</div>
+{% endblock content %}
+
