@@ -1,3 +1,108 @@
+
+
+function show_echarts(myChart, data, meta){
+    // 基于准备好的dom，初始化echarts实例
+    links = data[1];
+    data = data[0];
+
+    // 指定图表的配置项和数据
+    var categories = [{
+            name: "Event",
+            symbolSize: 35,},{
+            name: "User",
+            symbolSize: 23,},{
+            name: "Topic",
+            symbolSize: 18,}
+        ];
+    var option = {
+        title: {
+            text: meta['title'],
+        },
+        legend: {
+            data: [
+                {name: "Event"},
+                {name: "User"},
+                {name: "Topic"}
+            ],
+            type: 'plain',
+            orient: 'vertical',
+            right: 20
+        },
+        tooltip: {
+            trigger: 'item',
+        },
+        series: [{
+            data: data,
+            links: links,
+            categories: categories,
+            type: 'graph',
+            layout : 'force',
+            autoCurveness: 3,
+            roam: true,
+            draggable: true,
+            hoverAnimation: true,
+            focusNodeAdjacency: true,
+            coordinateSystem: null,
+            force: {
+                repulsion: 70,
+                gravity: 0.1,
+                friction: 0.4,
+                layoutAnimation: true,
+            },
+            label: {
+                show: true,
+                position: 'inside',
+            },
+            emphasis: {
+                lineStyle: {
+                    width: 7,
+                },
+                itemStyle: {
+                    borderWidth: 1,
+                    borderColor: 'rgba(0, 0, 0, 1)',
+                    shadowBlur: 1,
+                }
+            },
+            tooltip: {
+                formatter: function(params){
+                    var result = '';
+                    if(params.dataType == 'node'){
+                        if(params.data.category == 1){
+                            result += 'Name: ' + String(params.data.name) + '<br>';
+                            result += 'ID: ' + String(params.data.value);
+                        }else if(params.data.category == 0){
+                            result += 'Event: ' + String(params.data.name);
+                        }else if(params.data.category == 2){
+                            result += 'Topic: ' + String(params.data.name) + '<br>';
+                            result += 'Count: ' + String(params.data.count) + '<br>';
+                            result += 'Time: ' + String(params.data.time).slice(0,16).replace('T', ' ');
+                        }
+                    } else if (params.dataType == 'edge') {
+                        if(params.data.category == 'PARTICIPATE'){// event user
+                            result += "Type: " + String(params.data.type) + '<br>';
+                            result += "Time: " + String(params.data.time).slice(0,16).replace('T', ' ');
+                        } else if (params.data.category == 'COOCCURENCE'){// event event
+
+                        } else if (params.data.category == 'PRODUCE'){// event topic
+
+                        } else if (params.data.category == 'INTERACT'){// user user
+
+                        } else if (params.data.category == 'JOIN'){// user topic
+
+                        } else if (params.data.category == 'RELATED'){// topic topic
+
+                        }
+                    }
+                    return result;
+                }// formatter
+            }// tooltip
+        }]// serious
+    };// option
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.hideLoading();
+    myChart.setOption(option);
+}
+
 function event_user(){
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
@@ -6,12 +111,10 @@ function event_user(){
     var s_time = $("#s-time").val().replace(" ", "T");
     var e_time = $("#e-time").val().replace(" ", "T");
 
-    var event_id = 7;
-    var s_time = '2019-09-01T15:09';
-    var e_time = '2019-10-01T15:09';
-
     var data = {"event_id":event_id, "s_time":s_time, "e_time":e_time};
     var data = JSON.stringify(data);
+
+    var meta = {'title':'Event User Relationship', };
 
     $.ajax({
      type:"POST",
@@ -20,79 +123,11 @@ function event_user(){
      data:data,
      // dataType:"json",
      error:function(data){
-        console.log("error")
+        console.log("Function event_user() can not get data from server.");
      },
      success:function(data){
-        console.log("success");
-
-        // 基于准备好的dom，初始化echarts实例
-        links = data[1];
-        data = data[0];
-
-        // 指定图表的配置项和数据
-        var categories = [
-            {name: "Event"},
-            {name: "User"},
-            {name: "Topic"}
-        ];
-        var option = {
-            title: {
-                text: 'Event User Relationship'
-            },
-            legend: {
-                data: [
-                    {name: "Event"},
-                    {name: "User"},
-                    {name: "Topic"}
-                ],
-                type: 'plain',
-                orient: 'vertical',
-                right: 20
-            },
-            tooltip: {
-                trigger: 'item',
-            },
-            series: [{
-                data: data,
-                links: links,
-                categories: categories,
-                type: 'graph',
-                layout : 'force',
-                roam: true,
-                draggable: true,
-                hoverAnimation: true,
-                coordinateSystem: null,
-                force: {
-                    repulsion: 70,
-                    gravity: 0.1,
-                    friction: 0.4,
-                    layoutAnimation: true
-                },
-                symbolSize: 15,
-                label: {
-                    show: true,
-                    position: 'inside',
-                },
-                tooltip: {
-                    formatter: function(params){
-                        if(params.data.category == 1){
-                            var result = 'User name: ' + String(params.data.name) + '<br>';
-                            result += 'Unique ID: ' + String(params.data.value);
-                        }else if(params.data.category == 0){
-                            var result = 'Event name: ' + String(params.data.name);
-                        }else if(params.data.category == 2){
-                            var result = 'Topic name: ' + String(params.data.name);
-                        }
-                        console.log("formatter");
-                        return result;
-                    }
-                },
-            }]
-        };
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.hideLoading();
-        myChart.setOption(option);
+        console.log("Function event_user() get data from server successful.");
+        show_echarts(myChart, data, meta);
      }});
 }
 function event_user_page(){
