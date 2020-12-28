@@ -28,6 +28,8 @@
     <script src="/static/bootstrap3-typeahead.min.js"></script>
     <!-- 引入 ECharts 文件 -->
     <script src="/static/echarts/echarts.min.js"></script>
+    <!-- 引入 query 文件 -->
+    <script src="/static/query.js"></script>
 
     {% block scripts %}
     {%- endblock scripts %}
@@ -45,49 +47,62 @@
 <body {% block body_attribs %}{% endblock body_attribs %}>
 {% block body -%}
 
+{% block navbar -%}
+<div class="container">
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Twitter Graph</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true"
+                       aria-expanded="false">Event<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <!--<li class="dropdown-header">Nav header</li>-->
+                        <li><a href="event/user">Event user</a></li>
+                        <li><a href="event/topic">Event topic</a></li>
+                        <li><a href="event/info">Event top N topic</a></li>
+                        <li><a href="event/neighbor">Event neighbor</a></li>
+                    </ul>
+                </li>
+                <li><a href="user">User</a></li>
+                <li><a href="topic">Topic</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="./">About<span class="sr-only">(current)</span></a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+    </nav>
+</div>
+{%- endblock navbar %}
+
+
 <!-- Main component for a primary marketing message or call to action -->
 <div class="container">
     <!-- Static navbar -->
-    {% block navbar -%}
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Twitter Graph</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false">Event<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <!--<li class="dropdown-header">Nav header</li>-->
-                            <li><a href="event/user">Event user</a></li>
-                            <li><a href="event/topic">Event topic</a></li>
-                            <li><a href="event/info">Event top N topic</a></li>
-                            <li><a href="event/neighbor">Event neighbor</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="user">User</a></li>
-                    <li><a href="topic">Topic</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="./">About<span class="sr-only">(current)</span></a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
-    </nav>
-    {%- endblock navbar %}
+
 
 
     {% block content -%}
     {%- endblock content %}
 
-    {% block footer -%}
-    {%- endblock footer %}
+    <div class="jumbotron">
+        <h2>Search result.</h2>
+        <div id="result" class="row" style="height:500px;"></div>
+    </div>
+
+
 </div> <!-- /container -->
 {%- endblock body %}
-
+<footer class="container">
+    <div class="container-item">
+        <center><h4 class="text-muted">2020.12</h4></center>
+    </div>
+</footer>
 
 </body>
 {%- endblock html %}

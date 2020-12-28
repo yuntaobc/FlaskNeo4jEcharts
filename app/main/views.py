@@ -8,10 +8,11 @@ def index():
     return render_template('index.html')
 
 
-@main.route('/event', methods=['GET', 'POST'])
-def event():
-    form = EventUserForm()
-    return render_template('event.html', form=form)
+@main.route('/event/<item>', methods=['GET', 'POST'])
+def event(item):
+    if item == 'user':
+        form = EventUserForm()
+        return render_template('event.html', form=form)
 
 
 @main.route('/user', methods=['GET', 'POST'])

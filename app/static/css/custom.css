@@ -2,6 +2,7 @@
 .form-item,.form-item-label,.form-item-content-wrapper,.form-calender-picker,.form-item-input {
     display: inline-block;
 }
+
 .form-item {
     float: left;
 }
@@ -13,4 +14,14 @@
 span.form-calender-picker i {
     left: 6.6em;
     top: 0.4em;
+}
+
+.container-item {
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  padding: 18px;
+  background-color: #f5f5f5;
+  border-radius: 6px;
 }

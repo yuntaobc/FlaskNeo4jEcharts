@@ -7,10 +7,6 @@
 
 {% block body %}{{ super() }}{% endblock %}
 
-{% block scripts %}
-    <script src="/static/query.js"></script>
-{% endblock scripts %}
-
 {% block content %}
 <div class="jumbotron">
     <h2>Event search.</h2>
@@ -50,10 +46,6 @@
             event_user_page();
         });
     </script>
-</div>
-<div class="jumbotron">
-    <h2>Search result.</h2>
-    <div id="result" class="row" style="height:500px;"></div>
 </div>
 {% endblock content %}
 
