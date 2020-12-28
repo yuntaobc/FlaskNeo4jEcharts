@@ -1,8 +1,6 @@
 
 function show_echarts(myChart, data, meta){
     // 基于准备好的dom，初始化echarts实例
-    links = data[1];
-    data = data[0];
 
     // 指定图表的配置项和数据
     var categories = [{
@@ -31,8 +29,8 @@ function show_echarts(myChart, data, meta){
             trigger: 'item',
         },
         series: [{
-            data: data,
-            links: links,
+            data: data[0],
+            links: data[1],
             categories: categories,
             type: 'graph',
             layout : 'force',
@@ -83,7 +81,8 @@ function show_echarts(myChart, data, meta){
                         } else if (params.data.category == 'COOCCURENCE'){// event event
 
                         } else if (params.data.category == 'PRODUCE'){// event topic
-
+                            result += "Type: " + String(params.data.category) + '<br>';
+                            result += "Time: " + String(params.data.time).slice(0,16).replace('T', ' ');
                         } else if (params.data.category == 'INTERACT'){// user user
 
                         } else if (params.data.category == 'JOIN'){// user topic
@@ -113,10 +112,10 @@ function send_ajax(url, data){
         contentType: "application/json;charset=utf-8",
         // dataType:"json",
         error:function(data){
-            console.log("Function event_user() can not get data from server.");
+            console.log("Error: Function event_user() can not get data from server.");
         },
         success:function(data){
-            console.log("Function event_user() get data from server successful.");
+            console.log("Success: Function event_user() get data from server.");
             result = data;
         }
      });
@@ -142,6 +141,25 @@ function event_user(){
     show_echarts(myChart, result, meta);
 }
 
+function event_topic(){
+    var myChart = echarts.init(document.getElementById('result'));
+    myChart.showLoading();
+
+    var event_id = Number($("#event-id").val());
+    var s_time = $("#s-time").val().replace(" ", "T");
+    var e_time = $("#e-time").val().replace(" ", "T");
+
+    var data = {"event_id":event_id, "s_time":s_time, "e_time":e_time};
+    data = JSON.stringify(data);
+
+    var url = '/api/event/topic';
+    var meta = {'title':'Event Topic Relationship', };
+    var result = send_ajax(url, data);
+
+    show_echarts(myChart, result, meta);
+}
+
+
 function event_user_page(){
     $("#name-input").typeahead({
         source:function(query, process){
@@ -153,29 +171,24 @@ function event_user_page(){
                 data:data,
                 //dataType:"json",
                 error:function(data){
-                   console.log("error")
-                   console.log(data);
+                   console.log("Get #name-input typeahead false.")
                 },
-             success:function(data){
-                data = data[0];
-                process(data);
-              }// success
+                success:function(data){
+                    data = data[0];
+                    process(data);
+                }// success
             })// ajax
         },//source
-        displayText:function(item){
-            return item.name;
-        }
     });
     $("#name-input").change(function() {
       var current = $("#name-input").typeahead("getActive");
       if (current) {
-        // console.log(current)
         $("#event-id").val(current.event_id);
     }});
     $('#s-time').datetimepicker({
-        format: 'YYYY-MM-DD HH:MM'
+        format: 'YYYY-MM-DD HH:mm',
     });
     $('#e-time').datetimepicker({
-        format: 'YYYY-MM-DD HH:MM'
+        format: 'YYYY-MM-DD HH:mm',
     });
 }

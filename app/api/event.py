@@ -7,7 +7,7 @@ import json
 
 CATEGORY_EVENT = 0
 CATEGORY_USER = 1
-CATEGORY_TOPIC = 1
+CATEGORY_TOPIC = 2
 
 
 @api.route('/event/user', methods=['GET', 'POST'])
@@ -73,11 +73,11 @@ def event_topic():
     data.append(event)
 
     # extract topic, relationship info
-    for record in records:
-        link = {'id': record[1].id, 'source': record[1].start_node.id, 'target': record[1].end_node.id,
-                'time': record[1].get('time').iso_format(), 'category': record[1].type}
-        topic = {'id': record[2].id, 'name': record[2].get('name'), 'count': record[2].get('count'),
-                 'time': record[2].get('time'), 'category': CATEGORY_TOPIC}
+    for r in records:
+        link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
+                'time': r[1].get('time').iso_format(), 'category': r[1].type}
+        topic = {'id': r[2].id, 'name': r[2].get('name'), 'count': r[2].get('count'),
+                 'time': r[2].get('time').iso_format(), 'category': CATEGORY_TOPIC}
 
         links.append(link)
         if data.count(topic) == 0: data.append(topic)
