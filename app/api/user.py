@@ -53,6 +53,47 @@ def user_event():
     return Response(json.dumps(response), mimetype="application/json")
 
 
+@api.route('/user/topic', methods=['GET', 'POST'])
+def user_topic():
+    # function: find topics which related to given event in specific time
+    # response
+    data = []
+    links = []
+
+    # get request data.
+    # _data = {'event_id': 61, 's_time': '2019-09-20T15:29', 'e_time': '2020-12-30T17:30'}
+    _data = json.loads(request.get_data())
+
+    # construct Cypher query
+    _query = "MATCH (user:User {user_id: $user_id})-[relationship:JOIN]->(topic:Topic) " \
+             "WHERE datetime($s_time) <= relationship.time <= datetime($e_time) " \
+             "RETURN user, relationship, topic"
+
+    # reorganize query result.
+    result = neo4j_db.session.run(_query, _data)
+    records = result.values()
+
+    # extract event info
+    user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id'),
+            'category': CATEGORY_USER}
+    data.append(user)
+
+    # extract topic, relationship info
+    for r in records:
+        link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
+                'time': r[1].get('time').iso_format(), 'category': r[1].type}
+        topic = {'id': r[2].id, 'name': r[2].get('name'), 'count': r[2].get('count'),
+                 'time': r[2].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+
+        links.append(link)
+        if data.count(topic) == 0: data.append(topic)
+
+    # return Json data
+    response = [data, links]
+    return Response(json.dumps(response), mimetype="application/json")
+
+
+
 @api.route('/user/neighbor', methods=['GET', 'POST'])
 def user_neighbor():
     # func: find N level neighbor with specific user
@@ -67,10 +108,29 @@ def user_neighbor():
     # construct Cypher query
 
     _query = "MATCH (user:User {user_id: $user_id})-[relationship:Join]->(user:User)"
+    _query = "MATCH (user1:User {user_id: $user_id})-[r:INTERACT*" + str(_data['level']) + ".." + str(
+        _data['level']) + "]-(user2:User) RETURN user1,r,user2 LIMIT $limit"
 
     # reorganize results
+    result = neo4j_db.session.run(_query, _data)
+    records = result.values()
 
     # return Json data
+    # extract event info
+    user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'unique_id': records[0][0].get('unique_id'),
+            'category': CATEGORY_USER}
+    data.append(user)
+    # reorganize query result. like:
+    for r in records:
+        link = {'source': str(user['id']), 'target': str(r[2].id), 'category': 'COOCCURENCE'}
+        users = {'id': r[2].id, 'name': r[2].get('name'), 'unique_id': r[2].get('unique_id'), 'category': CATEGORY_USER}
+
+        links.append(link)
+        if data.count(users) == 0: data.append(users)
+
+    # return Json data
+    response = [data, links]
+    return Response(json.dumps(response), mimetype="application/json")
 
     return
 
@@ -85,24 +145,31 @@ def user_info():
     # receive request data
     # _data = {'user_id': 322, 'time': '2020-12-30T20:20'}
     _data = json.loads(request.get_data())
+    print(_data)
 
     # construct Cypher query
     # count topic times or not?
-    _query = "MATCH (user:User {user_id: $user_id}-[relationship:Join]->(topic:Topic) " \
-             "WHERE relationship.time <= datetime($time) " \
-             "RETURN user, relationship, topic "
+    _query = "MATCH (user:User {user_id: $user_id})-[relationship:JOIN]->(topic:Topic) " \
+             "WHERE relationship.time <= datetime($e_time) " \
+             "RETURN topic " \
+             "ORDER BY topic.count DESC " \
+             "LIMIT $limit "
 
     # reorganize results, user topic linksone
     result = neo4j_db.session.run(_query, _data)
     records = result.values()
-
+    print(records)
     # extract user node, which needs only
-    user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id')}
-    data.append(user)
+    # user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id')}
+    # data.append(user)
 
     # how to organize topic? one or both?
     # 1. a table, with topic name, times. Need count the number of each topic
     # 2. a time line, with time line and node represent each topic. Need count when same topic present as one time
+    for r in records:
+        topic = {'id': r[0].id, 'name': r[0].get('name'), 'count': r[0].get('count'),
+                 'time': r[0].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+        data.append(topic)
 
     # return Json data
     response = [data, links]

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf%}
+
+{% block title %}User-topic{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h2>User participated what topic.</h2>
+    <form class="form form-horizontal" method="post" role="form">
+        <div class="form-item">
+            <div class="form-item-content-wrapper">
+                <input id="user-id" type="hidden" value="">
+                {{ form.name() }}
+            </div>
+        </div>
+        <div class="form-item">
+            <div class="form-item-content-wrapper">
+                <div class="form-item-label">
+                    <span>Time from:</span>
+                </div>
+                <span class="form-calender-picker">
+                    <div class="form-item-input row col-sm-6">{{ form.s_time() }}</div>
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+            </div>
+        </div>
+        <div class="form-item">
+            <div class="form-item-content-wrapper">
+                <div class="form-item-label">
+                    <span>to</span>
+                </div>
+                <span class="form-calender-picker">
+                        <div class="form-item-input row col-sm-6">{{ form.e_time() }}</div>
+                        <i class="glyphicon glyphicon-calendar"></i>
+                </span>
+            </div>
+        </div>
+        <input type="button" id="submit" onclick="user_topic()" value="查 询" >
+    </form>
+    <script>
+        $(function() {
+            user_event_page();
+        });
+    </script>
+</div>
+{% endblock content %}
+

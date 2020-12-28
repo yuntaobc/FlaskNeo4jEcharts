@@ -237,7 +237,59 @@ function user_event() {
     var result = send_ajax(url, data);
 
     show_echarts(myChart, result, meta);
+}
 
+
+function user_topic(){
+    var myChart = echarts.init(document.getElementById('result'));
+    myChart.showLoading();
+
+    var user_id = Number($("#user-id").val());
+    var s_time = $("#s-time").val().replace(" ", "T");
+    var e_time = $("#e-time").val().replace(" ", "T");
+
+    var data = {"user_id":user_id, "s_time":s_time, "e_time":e_time};
+    data = JSON.stringify(data);
+
+    var url = '/api/user/topic';
+    var meta = {'title':'User Topic Relationship', };
+    var result = send_ajax(url, data);
+
+    show_echarts(myChart, result, meta);
+}
+
+
+function user_neighbor() {
+    var myChart = echarts.init(document.getElementById('result'));
+    myChart.showLoading();
+
+    var user_id = Number($("#user-id").val());
+    var level = Number($("#level").val());
+    var limit = Number($("#limit").val());
+
+    var data = {"user_id":user_id, "level": parseInt(level), 'limit': parseInt(limit)};
+    data = JSON.stringify(data);
+
+    var url = '/api/user/neighbor';
+    var meta = {'title':'User neighbor', };
+    var result = send_ajax(url, data);
+
+    show_echarts(myChart, result, meta);
+}
+
+function user_info() {
+    var user_id = Number($("#user-id").val());
+    var limit = Number($("#limit").val());
+    var e_time = $("#e-time").val().replace(" ", "T");
+
+    var data = {"user_id":user_id, "limit": limit, "e_time": e_time};
+    data = JSON.stringify(data);
+
+    var url = '/api/user/info';
+    var meta = {'title':'User top n topic', };
+    var result = send_ajax(url, data);
+
+    show_table(result);
 }
 
 function event_user_page(){
