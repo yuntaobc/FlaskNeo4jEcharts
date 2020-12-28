@@ -136,7 +136,7 @@ def event_info():
     _query = "MATCH (event:Event {event_id: $event_id})-[relationship:PRODUCE]->(topic:Topic) " \
              "WHERE relationship.time <= datetime($e_time) " \
              "RETURN topic " \
-             "ORDER BY topic.count ASC " \
+             "ORDER BY topic.count DESC " \
              "LIMIT $limit "
 
     # reorganize query result. like:
