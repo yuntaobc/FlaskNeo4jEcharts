@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf%}
 
-{% block title %}event-user{% endblock %}
+{% block title %}Event-topN-topic{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
-    <h2>Event search.</h2>
+    <h2>Event's key topic.</h2>
     <form class="form form-horizontal" method="post" role="form">
         <div class="form-item">
             <div class="form-item-content-wrapper">
@@ -13,21 +13,23 @@
                 {{ form.name() }}
             </div>
         </div>
+
         <div class="form-item">
             <div class="form-item-content-wrapper">
                 <div class="form-item-label">
-                    <span>Time from:</span>
+                    <span> Limit:</span>
                 </div>
                 <span class="form-calender-picker">
-                    <div class="form-item-input row col-sm-6">{{ form.s_time() }}</div>
-                    <i class="glyphicon glyphicon-calendar"></i>
+                    <div class="form-item-input row col-sm-6">
+                        <input id="limit" name="limit" type="text" value="20" placeholder="20"></div>
+                    <i class="glyphicon glyphicon-dashboard"></i>
                 </span>
             </div>
         </div>
         <div class="form-item">
             <div class="form-item-content-wrapper">
                 <div class="form-item-label">
-                    <span>to</span>
+                    <span>End time:</span>
                 </div>
                 <span class="form-calender-picker">
                         <div class="form-item-input row col-sm-6">{{ form.e_time() }}</div>
@@ -35,7 +37,7 @@
                 </span>
             </div>
         </div>
-        <input type="button" id="submit" onclick="event_user()" value="查 询" >
+        <input type="button" id="submit" onclick="event_info()" value="查 询" >
     </form>
     <script>
         $(function() {

@@ -87,18 +87,19 @@ def event_topic():
     return Response(json.dumps(response), mimetype="application/json")
 
 
-@api.route('/event/info', methods=['GET', 'POST'])
+@api.route('/event/neighbor', methods=['GET', 'POST'])
 def event_neighbor():
     # response DID NOT TEST
     data = []
     links = []
 
     # get request data.
-    # eg. {'event_id': 123, 'level': 2}
-    _data = {'event_id': 123, 'level': 2}
+    # _data = {'event_id': 123, 'level': 2, 'limit': 3}
+    _data = json.loads(request.get_data())
+
     # construct Cypher query
-    _query = "MATCH (event1:Event {event_id:$event_id})-[r:COOCCURENCE *$level..$level]-(event2:Event) " \
-             "RETURN event1,r,event2 "
+    _query = "MATCH (event1:Event {event_id:$event_id})-[r:COOCCURENCE*" + str(_data['level']) + ".." + str(
+        _data['level']) + "]-(event2:Event) RETURN event1,r,event2 LIMIT $limit"
 
     # reorganize query result.
     result = neo4j_db.session.run(_query, _data)
@@ -108,13 +109,12 @@ def event_neighbor():
     event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
     data.append(event)
     # reorganize query result. like:
-    for record in records:
-        link = {'id': record[1].id, 'source': record[1].start_node.id, 'target': record[1].end_node.id,
-                'time': record[1].get('time').iso_format(), 'type': record[1].get('type')}
-        topic = {'id': record[2].id, 'name': record[2].get('name'), 'category': CATEGORY_TOPIC}
+    for r in records:
+        link = {'source': str(event['id']), 'target': str(r[2].id), 'category': 'COOCCURENCE'}
+        events = {'id': r[2].id, 'name': r[2].get('name'), 'category': CATEGORY_EVENT}
 
         links.append(link)
-        if data.count(topic) == 0: data.append(topic)
+        if data.count(events) == 0: data.append(events)
 
     # return Json data
     response = [data, links]
@@ -129,14 +129,15 @@ def event_info():
     links = []
 
     # get request data.
-    # eg. {'event_id': 123}
-    _data = {'event_id': 5, 'number': 20, 'e_time': '2019-09-29T15:29'}
+    # _data = {'event_id': 5, 'limit': 20, 'e_time': '2019-09-29T15:29'}
+    _data = json.loads(request.get_data())
+
     # construct Cypher query
-    _query = "MATCH (event:Event {event_id: $event_id})-[relationship:Produce]->(topic:Topic) " \
+    _query = "MATCH (event:Event {event_id: $event_id})-[relationship:PRODUCE]->(topic:Topic) " \
              "WHERE relationship.time <= datetime($e_time) " \
              "RETURN topic " \
-             "ORDER BY topic.count " \
-             "LIMIT $number "
+             "ORDER BY topic.count ASC " \
+             "LIMIT $limit "
 
     # reorganize query result. like:
     result = neo4j_db.session.run(_query, _data)
@@ -148,6 +149,10 @@ def event_info():
 
     # extract topic
     # return a table
+    for r in records:
+        topic = {'id': r[0].id, 'name': r[0].get('name'), 'count': r[0].get('count'),
+                 'time': r[0].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+        data.append(topic)
 
     # return Json data
     response = [data]

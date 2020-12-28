@@ -10,18 +10,15 @@ def index():
 
 @main.route('/event/<item>', methods=['GET', 'POST'])
 def event(item):
+    form = EventForm()
     if item == 'user':
         page = 'event_user.html'
-        form = EventForm()
     elif item == 'topic':
         page = 'event_topic.html'
-        form = EventForm()
     elif item == 'neighbor':
         page = 'event_neighbor.html'
-        form = EventForm()
     elif item == 'info':
         page = 'event_info.html'
-        form = ''
     return render_template(page, form=form)
 
 

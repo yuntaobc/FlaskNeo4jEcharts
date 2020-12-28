@@ -79,7 +79,7 @@ function show_echarts(myChart, data, meta){
                             result += "Type: " + String(params.data.type) + '<br>';
                             result += "Time: " + String(params.data.time).slice(0,16).replace('T', ' ');
                         } else if (params.data.category == 'COOCCURENCE'){// event event
-
+                            // to many time, cannot decide which to use
                         } else if (params.data.category == 'PRODUCE'){// event topic
                             result += "Type: " + String(params.data.category) + '<br>';
                             result += "Time: " + String(params.data.time).slice(0,16).replace('T', ' ');
@@ -102,6 +102,33 @@ function show_echarts(myChart, data, meta){
 }
 
 
+function show_table(data){
+    data = data[0]
+
+    $('.table').remove()
+    var table = $('<table/>').addClass('table table-striped');
+    var th1 = $('<th/>').html('话题');
+    var th2 = $('<th/>').html('频次');
+    var th3 = $('<th/>').html('时间');
+    var thead = $('<tr/>').append(th1).append(th2).append(th3);
+    table.append(thead);
+
+    var tbody = $('<tbody/>');
+
+    for(var row in data){
+        var td1 = $('<td/>').html(data[row]['name']);
+        var td2 = $('<td/>').html(data[row]['count']);
+        var td3 = $('<td/>').html(data[row]['time'].slice(0, 16).replace('T', ' '));
+
+        var tr = $('<tr/>').append(td1).append(td2).append(td3);
+        tbody.append(tr);
+    }
+
+    table.append(tbody);
+    $('#result').append(table);
+}
+
+
 function send_ajax(url, data){
     var result;
     $.ajax({
@@ -121,6 +148,7 @@ function send_ajax(url, data){
      });
     return result;
 }
+
 
 
 function event_user(){
@@ -160,6 +188,40 @@ function event_topic(){
 }
 
 
+function event_neighbor() {
+    var myChart = echarts.init(document.getElementById('result'));
+    myChart.showLoading();
+
+    var event_id = Number($("#event-id").val());
+    var level = Number($("#level").val());
+    var limit = Number($("#limit").val());
+
+    var data = {"event_id":event_id, "level": parseInt(level), 'limit': parseInt(limit)};
+    data = JSON.stringify(data);
+
+    var url = '/api/event/neighbor';
+    var meta = {'title':'Event neighbor', };
+    var result = send_ajax(url, data);
+
+    show_echarts(myChart, result, meta);
+}
+
+function event_info() {
+    var event_id = Number($("#event-id").val());
+    var limit = Number($("#limit").val());
+    var e_time = $("#e-time").val().replace(" ", "T");
+
+    var data = {"event_id":event_id, "limit": limit, "e_time": e_time};
+    data = JSON.stringify(data);
+
+    var url = '/api/event/info';
+    var meta = {'title':'Event top n topic', };
+    var result = send_ajax(url, data);
+
+    show_table(result);
+}
+
+
 function event_user_page(){
     $("#name-input").typeahead({
         source:function(query, process){
@@ -185,10 +247,14 @@ function event_user_page(){
       if (current) {
         $("#event-id").val(current.event_id);
     }});
-    $('#s-time').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm',
-    });
-    $('#e-time').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm',
-    });
+    if($('#s-time') != null ){
+        $('#s-time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+        });
+    }
+    if($('#e-time') != null){
+        $('#e-time').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm',
+        });
+    }
 }

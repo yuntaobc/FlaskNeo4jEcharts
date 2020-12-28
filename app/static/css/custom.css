@@ -25,3 +25,9 @@ span.form-calender-picker i {
   background-color: #f5f5f5;
   border-radius: 6px;
 }
+
+#result {
+    margin-right: 0px;
+    margin-left: 0px;
+    min-height:650px;
+}

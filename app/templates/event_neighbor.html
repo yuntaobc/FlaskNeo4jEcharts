@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf%}
 
-{% block title %}event-user{% endblock %}
+{% block title %}Event-neighbor{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
-    <h2>Event search.</h2>
+    <h2>Event's n level neighbor.</h2>
     <form class="form form-horizontal" method="post" role="form">
         <div class="form-item">
             <div class="form-item-content-wrapper">
@@ -16,26 +16,31 @@
         <div class="form-item">
             <div class="form-item-content-wrapper">
                 <div class="form-item-label">
-                    <span>Time from:</span>
+                    <span> Level:</span>
                 </div>
                 <span class="form-calender-picker">
-                    <div class="form-item-input row col-sm-6">{{ form.s_time() }}</div>
-                    <i class="glyphicon glyphicon-calendar"></i>
+                    <div class="form-item-input row col-sm-6">
+                        <input id="level" name="level" type="text" value="1" placeholder="1">
+                    </div>
+                    <i class="glyphicon glyphicon-dashboard"></i>
                 </span>
             </div>
         </div>
+
         <div class="form-item">
             <div class="form-item-content-wrapper">
                 <div class="form-item-label">
-                    <span>to</span>
+                    <span>Limit:</span>
                 </div>
                 <span class="form-calender-picker">
-                        <div class="form-item-input row col-sm-6">{{ form.e_time() }}</div>
-                        <i class="glyphicon glyphicon-calendar"></i>
+                    <div class="form-item-input row col-sm-6">
+                        <input id="limit" name="limit" type="text" value="30" placeholder="30">
+                    </div>
+                    <i class="glyphicon glyphicon-dashboard"></i>
                 </span>
             </div>
         </div>
-        <input type="button" id="submit" onclick="event_user()" value="查 询" >
+        <input type="button" id="submit" onclick="event_neighbor()" value="查 询" >
     </form>
     <script>
         $(function() {
