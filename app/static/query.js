@@ -38,7 +38,7 @@ function show_echarts(myChart, data, meta){
             roam: true,
             draggable: true,
             hoverAnimation: true,
-            focusNodeAdjacency: true,
+            // focusNodeAdjacency: true,
             coordinateSystem: null,
             force: {
                 repulsion: 70,
