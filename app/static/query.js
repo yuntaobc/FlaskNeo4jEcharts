@@ -88,7 +88,10 @@ function show_echarts(myChart, data, meta){
                         } else if (params.data.category == 'JOIN'){// user topic
 
                         } else if (params.data.category == 'RELATED'){// topic topic
-
+                            result += "Level: " + String(params.data.level) + '<br>';
+                            if (params.data.level == 1){
+                                result += "PMI: " + String(params.data.PMI);
+                            }
                         }
                     }
                     return result;
