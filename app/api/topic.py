@@ -33,7 +33,7 @@ def topic_neighbor():
              'time': records[0][0].get('time').iso_format(), 'category': CATEGORY_TOPIC}
     data.append(topic)
     # reorganize query result. like:
-    print(records[0])
+
     for r in records:
         link = {'source': str(topic['id']), 'target': str(r[2].id),'level': _data['level'], 'category': 'RELATED'}
         topics = {'id': r[2].id, 'name': r[2].get('name'), 'count': r[2].get('count'),
