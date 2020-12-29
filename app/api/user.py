@@ -122,7 +122,7 @@ def user_neighbor():
     data.append(user)
     # reorganize query result. like:
     for r in records:
-        link = {'source': str(user['id']), 'target': str(r[2].id), 'category': 'COOCCURENCE'}
+        link = {'source': str(user['id']), 'target': str(r[2].id), 'category': 'INTERACT'}
         users = {'id': r[2].id, 'name': r[2].get('name'), 'unique_id': r[2].get('unique_id'), 'category': CATEGORY_USER}
 
         links.append(link)
