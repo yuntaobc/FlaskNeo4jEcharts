@@ -24,7 +24,8 @@ def event_user():
     # construct Cypher query
     _query = "MATCH (user:User)-[relationship:PARTICIPATE]->(event:Event {event_id: $event_id}) " \
              "WHERE datetime($s_time) <= relationship.time <= datetime($e_time) " \
-             "RETURN event, relationship, user"
+             "RETURN event, relationship, user " \
+             "LIMIT 400"
 
     # reorganize query result. like:
     result = neo4j_db.session.run(_query, _data)
@@ -62,7 +63,8 @@ def event_topic():
     # construct Cypher query
     _query = "MATCH (event:Event {event_id: $event_id})-[relationship:PRODUCE]->(topic:Topic) " \
              "WHERE datetime($s_time) <= relationship.time <= datetime($e_time) " \
-             "RETURN event, relationship, topic"
+             "RETURN event, relationship, topic " \
+             "LIMIT 400"
 
     # reorganize query result.
     result = neo4j_db.session.run(_query, _data)
