@@ -84,9 +84,11 @@ function show_echarts(myChart, data, meta){
                             result += "Type: " + String(params.data.category) + '<br>';
                             result += "Time: " + String(params.data.time).slice(0,16).replace('T', ' ');
                         } else if (params.data.category == 'INTERACT'){// user user
+                            // result += "Level: " + String(params.data.level) + '<br>';
 
                         } else if (params.data.category == 'JOIN'){// user topic
-
+                            result += "Type: " + String(params.data.category) + '<br>';
+                            result += "Time: " + String(params.data.time).slice(0,16).replace('T', ' ');
                         } else if (params.data.category == 'RELATED'){// topic topic
                             result += "Level: " + String(params.data.level) + '<br>';
                             if (params.data.level == 1){
@@ -142,10 +144,10 @@ function send_ajax(url, data){
         contentType: "application/json;charset=utf-8",
         // dataType:"json",
         error:function(data){
-            console.log("Error: Function event_user() can not get data from server.");
+            console.log("Error: can not get data from server.");
         },
         success:function(data){
-            console.log("Success: Function event_user() get data from server.");
+            console.log("Success: get data from server.");
             result = data;
         }
      });
@@ -158,7 +160,7 @@ function event_user(){
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var event_id = Number($("#event-id").val());
+    var event_id = $("#event-id").val();
     var s_time = $("#s-time").val().replace(" ", "T");
     var e_time = $("#e-time").val().replace(" ", "T");
 
@@ -176,7 +178,7 @@ function event_topic(){
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var event_id = Number($("#event-id").val());
+    var event_id = $("#event-id").val();
     var s_time = $("#s-time").val().replace(" ", "T");
     var e_time = $("#e-time").val().replace(" ", "T");
 
@@ -195,7 +197,7 @@ function event_neighbor() {
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var event_id = Number($("#event-id").val());
+    var event_id = $("#event-id").val();
     var level = Number($("#level").val());
     var limit = Number($("#limit").val());
 
@@ -210,7 +212,7 @@ function event_neighbor() {
 }
 
 function event_info() {
-    var event_id = Number($("#event-id").val());
+    var event_id = $("#event-id").val();
     var limit = Number($("#limit").val());
     var e_time = $("#e-time").val().replace(" ", "T");
 
@@ -228,7 +230,7 @@ function user_event() {
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var user_id = Number($("#user-id").val());
+    var user_id = $("#user-id").val();
     var s_time = $("#s-time").val().replace(" ", "T");
     var e_time = $("#e-time").val().replace(" ", "T");
 
@@ -247,7 +249,7 @@ function user_topic(){
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var user_id = Number($("#user-id").val());
+    var user_id = $("#user-id").val();
     var s_time = $("#s-time").val().replace(" ", "T");
     var e_time = $("#e-time").val().replace(" ", "T");
 
@@ -266,7 +268,7 @@ function user_neighbor() {
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var user_id = Number($("#user-id").val());
+    var user_id = $("#user-id").val();
     var level = Number($("#level").val());
     var limit = Number($("#limit").val());
 
@@ -281,7 +283,7 @@ function user_neighbor() {
 }
 
 function user_info() {
-    var user_id = Number($("#user-id").val());
+    var user_id = $("#user-id").val();
     var limit = Number($("#limit").val());
     var e_time = $("#e-time").val().replace(" ", "T");
 
@@ -299,7 +301,7 @@ function topic_neighbor() {
     var myChart = echarts.init(document.getElementById('result'));
     myChart.showLoading();
 
-    var topic_id = Number($("#topic-id").val());
+    var topic_id = $("#topic-id").val();
     var level = Number($("#level").val());
     var limit = Number($("#limit").val());
 
