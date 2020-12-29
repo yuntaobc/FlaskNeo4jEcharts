@@ -135,7 +135,7 @@ def event_info():
     # construct Cypher query
     _query = "MATCH (event:Event {event_id: $event_id})-[relationship:PRODUCE]->(topic:Topic) " \
              "WHERE relationship.time <= datetime($e_time) " \
-             "RETURN topic " \
+             "RETURN DISTINCT topic " \
              "ORDER BY topic.count DESC " \
              "LIMIT $limit "
 

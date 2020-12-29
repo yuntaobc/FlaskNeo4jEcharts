@@ -151,7 +151,7 @@ def user_info():
     # count topic times or not?
     _query = "MATCH (user:User {user_id: $user_id})-[relationship:JOIN]->(topic:Topic) " \
              "WHERE relationship.time <= datetime($e_time) " \
-             "RETURN topic " \
+             "RETURN DISTINCT topic " \
              "ORDER BY topic.count DESC " \
              "LIMIT $limit "
 
