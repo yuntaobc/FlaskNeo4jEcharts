@@ -17,7 +17,7 @@ def topic_neighbor():
     links = []
 
     # get request data.
-    # _data = {'topic_id': 123, 'level': 2, 'limit': 3}
+    # _data = {'topic_id': '123', 'level': 2, 'limit': 3}
     _data = json.loads(request.get_data())
 
     # construct Cypher query

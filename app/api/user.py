@@ -20,7 +20,7 @@ def user_event():
     links = []
 
     # receive request data.
-    # _data = {"user_id": 322, "s_time": "2019-09-28T00:29", "e_time": "2019-09-28T02:30"}
+    # _data = {"user_id": '322', "s_time": "2019-09-28T00:29", "e_time": "2019-09-28T02:30"}
     _data = json.loads(request.get_data())
 
     # construct Cypher query
@@ -61,7 +61,7 @@ def user_topic():
     links = []
 
     # get request data.
-    # _data = {'event_id': 61, 's_time': '2019-09-20T15:29', 'e_time': '2020-12-30T17:30'}
+    # _data = {'user_id': '61', 's_time': '2019-09-20T15:29', 'e_time': '2020-12-30T17:30'}
     _data = json.loads(request.get_data())
 
     # construct Cypher query
@@ -102,7 +102,7 @@ def user_neighbor():
     links = []
 
     # receive request data
-    # _data = {'user_id': 322, 'level': 2}
+    # _data = {'user_id': '322', 'level': 2}
     _data = json.loads(request.get_data())
 
     # construct Cypher query
@@ -143,7 +143,7 @@ def user_info():
     links = []
 
     # receive request data
-    # _data = {'user_id': 322, 'time': '2020-12-30T20:20'}
+    # _data = {'user_id': '322', 'time': '2020-12-30T20:20'}
     _data = json.loads(request.get_data())
     print(_data)
 

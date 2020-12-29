@@ -146,6 +146,7 @@ neo4j-admin import \
 ./neo4j-admin import \
      --database twitter \
      --id-type=INTEGER \
+     --trim-strings=true \
      --nodes=Event=event.csv \
      --nodes=Topic=topic.csv \
      --nodes=User=user.csv \
@@ -154,8 +155,7 @@ neo4j-admin import \
      --relationships=PRODUCE=event_topic.csv \
      --relationships=INTERACT=user_user.csv \
      --relationships=JOIN=user_topic.csv \
-     --relationships=RELATED=topic_topic.csv \
-     --trim-strings=true
+     --relationships=RELATED=topic_topic.csv
 
 ```
 
@@ -171,18 +171,50 @@ neo4j-admin import \
 # User的id字段数字很大，统一改称STRING
 ./neo4j-admin import \
      --database twitter \
-     --id-type=STRING \
+     --skip-bad-relationships=true \
+     --nodes=User=user.csv \
      --nodes=Event=event.csv \
      --nodes=Topic=topic.csv \
-     --nodes=User=user.csv \
      --relationships=COOCCURENCE=event_event.csv \
      --relationships=PARTICIPATE=event_user.csv \
      --relationships=PRODUCE=event_topic.csv \
      --relationships=INTERACT=user_user.csv \
      --relationships=JOIN=user_topic.csv \
      --relationships=RELATED=topic_topic.csv \
-     --trim-strings=true
+
+     import \
+     --database twitter \
+     --id-type=STRING \
+     --nodes=User=user.csv \
+     --relationships=INTERACT=user_user.csv \
+
+
+     /home/yuntaobc/neo4j-community/bin/neo4j-admin import \
+      --database twitter \
+      --high-io=true \
+      --skip-bad-relationships=true \
+      --nodes=User=user.csv \
+      --nodes=Event=event.csv \
+      --nodes=Topic=topic.csv \
+      --relationships=COOCCURENCE=event_event.csv \
+      --relationships=PARTICIPATE=event_user.csv \
+      --relationships=PRODUCE=event_topic.csv \
+      --relationships=INTERACT=user_user.csv \
+      --relationships=JOIN=user_topic.csv \
+      --relationships=RELATED=topic_topic.csv 
+
 ```
 
+5. user_topic 重复表头
 
+```bash
+IMPORT DONE in 6m 4s 882ms. 
+Imported:
+  2201523 nodes
+  214236146 relationships
+  269076259 properties
+Peak memory usage: 1.087GiB
+There were bad entries which were skipped and logged into /media/yuntaobc/E/Ubuntu/neo-data/final/import.report 
+
+```
 #### Directory
