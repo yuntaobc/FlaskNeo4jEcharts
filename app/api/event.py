@@ -137,8 +137,9 @@ def event_info():
     # construct Cypher query
     _query = "MATCH (event:Event {event_id: $event_id})-[relationship:PRODUCE]->(topic:Topic) " \
              "WHERE relationship.time <= datetime($e_time) " \
-             "RETURN DISTINCT topic " \
-             "ORDER BY topic.count DESC " \
+             "WITH topic.name as name, sum(topic.count) as count, max(topic.time) as time " \
+             "RETURN name, count, time " \
+             "ORDER BY count DESC " \
              "LIMIT $limit "
 
     # reorganize query result. like:
@@ -152,8 +153,8 @@ def event_info():
     # extract topic
     # return a table
     for r in records:
-        topic = {'id': r[0].id, 'name': r[0].get('name'), 'count': r[0].get('count'),
-                 'time': r[0].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+        topic = {'name': r[0], 'count': r[1],
+                 'time': r[2].iso_format(), 'category': CATEGORY_TOPIC}
         data.append(topic)
 
     # return Json data

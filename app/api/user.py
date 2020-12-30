@@ -147,20 +147,20 @@ def user_info():
     # receive request data
     # _data = {'user_id': '322', 'time': '2020-12-30T20:20'}
     _data = json.loads(request.get_data())
-    print(_data)
 
     # construct Cypher query
     # count topic times or not?
     _query = "MATCH (user:User {user_id: $user_id})-[relationship:JOIN]->(topic:Topic) " \
              "WHERE relationship.time <= datetime($e_time) " \
-             "RETURN DISTINCT topic " \
-             "ORDER BY topic.count DESC " \
+             "WITH topic.name as name, sum(topic.count) as count, max(topic.time) as time " \
+             "RETURN name, count, time " \
+             "ORDER BY count DESC " \
              "LIMIT $limit "
 
     # reorganize results, user topic linksone
     result = neo4j_db.session.run(_query, _data)
     records = result.values()
-    print(records)
+
     # extract user node, which needs only
     # user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id')}
     # data.append(user)
@@ -169,8 +169,8 @@ def user_info():
     # 1. a table, with topic name, times. Need count the number of each topic
     # 2. a time line, with time line and node represent each topic. Need count when same topic present as one time
     for r in records:
-        topic = {'id': r[0].id, 'name': r[0].get('name'), 'count': r[0].get('count'),
-                 'time': r[0].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+        topic = {'name': r[0], 'count': r[1],
+                 'time': r[2].iso_format(), 'category': CATEGORY_TOPIC}
         data.append(topic)
 
     # return Json data
