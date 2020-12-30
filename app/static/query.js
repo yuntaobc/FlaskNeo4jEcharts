@@ -36,7 +36,7 @@ function show_echarts(myChart, data, meta){
             layout : 'force',
             autoCurveness: 3,
             roam: true,
-            draggable: true,
+            // draggable: true,
             hoverAnimation: true,
             // focusNodeAdjacency: true,
             coordinateSystem: null,
@@ -52,7 +52,8 @@ function show_echarts(myChart, data, meta){
             },
             emphasis: {
                 lineStyle: {
-                    width: 7,
+                    width: 3,
+                    color: 'rgba(0, 157, 255, 1)',
                 },
                 itemStyle: {
                     borderWidth: 1,
