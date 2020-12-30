@@ -218,3 +218,9 @@ There were bad entries which were skipped and logged into /media/yuntaobc/E/Ubun
 
 ```
 #### Directory
+
+```cypher
+CREATE INDEX ON :User(user_id)
+CREATE INDEX ON :Event(event_id)
+CREATE INDEX ON :Event(topic_id)
+```
