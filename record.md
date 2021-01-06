@@ -167,45 +167,28 @@ neo4j-admin import \
 
 4. user表id字段数值很大
 
+5. user_topic 重复表头
+
 ```bash
 # User的id字段数字很大，统一改称STRING
-./neo4j-admin import \
-     --database twitter \
-     --skip-bad-relationships=true \
-     --nodes=User=user.csv \
-     --nodes=Event=event.csv \
-     --nodes=Topic=topic.csv \
-     --relationships=COOCCURENCE=event_event.csv \
-     --relationships=PARTICIPATE=event_user.csv \
-     --relationships=PRODUCE=event_topic.csv \
-     --relationships=INTERACT=user_user.csv \
-     --relationships=JOIN=user_topic.csv \
-     --relationships=RELATED=topic_topic.csv \
-
-     import \
-     --database twitter \
-     --id-type=STRING \
-     --nodes=User=user.csv \
-     --relationships=INTERACT=user_user.csv \
-
-
-     /home/yuntaobc/neo4j-community/bin/neo4j-admin import \
-      --database twitter \
-      --high-io=true \
-      --skip-bad-relationships=true \
-      --nodes=User=user.csv \
-      --nodes=Event=event.csv \
-      --nodes=Topic=topic.csv \
-      --relationships=COOCCURENCE=event_event.csv \
-      --relationships=PARTICIPATE=event_user.csv \
-      --relationships=PRODUCE=event_topic.csv \
-      --relationships=INTERACT=user_user.csv \
-      --relationships=JOIN=user_topic.csv \
-      --relationships=RELATED=topic_topic.csv 
+neo4j-admin import \
+  --database twitter \
+  --high-io=true \
+  --skip-bad-relationships=true \
+  --skip-duplicate-nodes=true \
+  --max-memory=10G \
+  --nodes=User=user.csv \
+  --nodes=Event=event.csv \
+  --nodes=Topic=topic.csv \
+  --relationships=COOCCURENCE=event_event.csv \
+  --relationships=PARTICIPATE=event_user.csv \
+  --relationships=PRODUCE=event_topic.csv \
+  --relationships=INTERACT=user_user.csv \
+  --relationships=JOIN=user_topic.csv \
+  --relationships=RELATED=topic_topic.csv 
 
 ```
 
-5. user_topic 重复表头
 
 ```bash
 IMPORT DONE in 6m 4s 882ms. 
@@ -215,6 +198,15 @@ Imported:
   269076259 properties
 Peak memory usage: 1.087GiB
 There were bad entries which were skipped and logged into /media/yuntaobc/E/Ubuntu/neo-data/final/import.report 
+
+
+IMPORT DONE in 7m 37s 994ms. 
+Imported:
+  1903034 nodes
+  202484808 relationships
+  253754618 properties
+Peak memory usage: 257.1MiB
+There were bad entries which were skipped and logged into /home/yuntaobc/Programs/neo4j-community/bin/final/import.report
 
 ```
 #### Directory
