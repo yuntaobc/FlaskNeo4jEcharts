@@ -1,13 +1,9 @@
 from . import api
 from app.models import neo4j_db
 from flask import render_template, session, redirect, url_for
-from flask import Flask, g, Response, request
+from flask import Flask, g, Response, request, current_app
 # from ..models import neo4j_session
 import json
-
-CATEGORY_EVENT = 0
-CATEGORY_USER = 1
-CATEGORY_TOPIC = 2
 
 
 @api.route('/event/user', methods=['GET', 'POST'])
@@ -32,14 +28,16 @@ def event_user():
     records = result.values()
 
     # extract event info
-    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
+    event = {'id': records[0][0].id, 'name': records[0][0].get('name'),
+             'category': current_app.config['CATEGORY_EVENT']}
     data.append(event)
 
     # extract user, relationship info
     for r in records:
         link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
                 'type': r[1].get('type'), 'time': r[1].get('time').iso_format(), 'category': r[1].type}
-        user = {'id': r[2].id, 'name': r[2].get('name'), 'value': r[2].get('unique_id'), 'category': CATEGORY_USER}
+        user = {'id': r[2].id, 'name': r[2].get('name'), 'value': r[2].get('unique_id'),
+                'category': current_app.config['CATEGORY_USER']}
 
         links.append(link)
         if data.count(user) == 0: data.append(user)
@@ -71,7 +69,8 @@ def event_topic():
     records = result.values()
 
     # extract event info
-    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
+    event = {'id': records[0][0].id, 'name': records[0][0].get('name'),
+             'category': current_app.config['CATEGORY_EVENT']}
     data.append(event)
 
     # extract topic, relationship info
@@ -79,7 +78,7 @@ def event_topic():
         link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
                 'time': r[1].get('time').iso_format(), 'category': r[1].type}
         topic = {'id': r[2].id, 'name': r[2].get('name'), 'count': r[2].get('count'),
-                 'time': r[2].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+                 'time': r[2].get('time').iso_format(), 'category': current_app.config['CATEGORY_TOPIC']}
 
         links.append(link)
         if data.count(topic) == 0: data.append(topic)
@@ -108,12 +107,13 @@ def event_neighbor():
     records = result.values()
 
     # extract event info
-    event = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'category': CATEGORY_EVENT}
+    event = {'id': records[0][0].id, 'name': records[0][0].get('name'),
+             'category': current_app.config['CATEGORY_EVENT']}
     data.append(event)
     # reorganize query result. like:
     for r in records:
         link = {'source': str(event['id']), 'target': str(r[2].id), 'category': 'COOCCURENCE'}
-        events = {'id': r[2].id, 'name': r[2].get('name'), 'category': CATEGORY_EVENT}
+        events = {'id': r[2].id, 'name': r[2].get('name'), 'category': current_app.config['CATEGORY_EVENT']}
 
         links.append(link)
         if data.count(events) == 0: data.append(events)
@@ -154,7 +154,7 @@ def event_info():
     # return a table
     for r in records:
         topic = {'name': r[0], 'count': r[1],
-                 'time': r[2].iso_format(), 'category': CATEGORY_TOPIC}
+                 'time': r[2].iso_format(), 'category': current_app.config['CATEGORY_TOPIC']}
         data.append(topic)
 
     # return Json data

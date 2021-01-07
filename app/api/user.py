@@ -5,10 +5,6 @@ from flask import Flask, g, Response, request
 # from ..models import neo4j_session
 import json
 
-CATEGORY_EVENT = 0
-CATEGORY_USER = 1
-CATEGORY_TOPIC = 2
-
 
 @api.route('/user/event', methods=['GET', 'POST'])
 def user_event():
@@ -37,14 +33,14 @@ def user_event():
 
     # extract user node, which needs only one
     user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id'),
-            'category': CATEGORY_USER}
+            'category': current_app.config['CATEGORY_USER']}
     data.append(user)
 
     # extract relationship and events
     for r in records:
         link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
                 'type': r[1].get('type'), 'time': r[1].get('time').iso_format(), 'category': r[1].type}
-        event = {'id': r[2].id, 'name': r[2].get('name'), 'category': CATEGORY_EVENT}
+        event = {'id': r[2].id, 'name': r[2].get('name'), 'category': current_app.config['CATEGORY_EVENT']}
 
         links.append(link)
         if data.count(event) == 0: data.append(event)
@@ -77,7 +73,7 @@ def user_topic():
 
     # extract event info
     user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'value': records[0][0].get('unique_id'),
-            'category': CATEGORY_USER}
+            'category': current_app.config['CATEGORY_USER']}
     data.append(user)
 
     # extract topic, relationship info
@@ -85,7 +81,7 @@ def user_topic():
         link = {'id': r[1].id, 'source': str(r[1].start_node.id), 'target': str(r[1].end_node.id),
                 'time': r[1].get('time').iso_format(), 'category': r[1].type}
         topic = {'id': r[2].id, 'name': r[2].get('name'), 'count': r[2].get('count'),
-                 'time': r[2].get('time').iso_format(), 'category': CATEGORY_TOPIC}
+                 'time': r[2].get('time').iso_format(), 'category': current_app.config['CATEGORY_TOPIC']}
 
         links.append(link)
         if data.count(topic) == 0: data.append(topic)
@@ -120,12 +116,12 @@ def user_neighbor():
     # return Json data
     # extract event info
     user = {'id': records[0][0].id, 'name': records[0][0].get('name'), 'unique_id': records[0][0].get('unique_id'),
-            'category': CATEGORY_USER}
+            'category': current_app.config['CATEGORY_USER']}
     data.append(user)
     # reorganize query result. like:
     for r in records:
         link = {'source': str(user['id']), 'target': str(r[2].id), 'category': 'INTERACT'}
-        users = {'id': r[2].id, 'name': r[2].get('name'), 'unique_id': r[2].get('unique_id'), 'category': CATEGORY_USER}
+        users = {'id': r[2].id, 'name': r[2].get('name'), 'unique_id': r[2].get('unique_id'), 'category': current_app.config['CATEGORY_USER']}
 
         links.append(link)
         if data.count(users) == 0: data.append(users)
@@ -170,7 +166,7 @@ def user_info():
     # 2. a time line, with time line and node represent each topic. Need count when same topic present as one time
     for r in records:
         topic = {'name': r[0], 'count': r[1],
-                 'time': r[2].iso_format(), 'category': CATEGORY_TOPIC}
+                 'time': r[2].iso_format(), 'category': current_app.config['CATEGORY_TOPIC']}
         data.append(topic)
 
     # return Json data
