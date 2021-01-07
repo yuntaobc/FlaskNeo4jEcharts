@@ -1,11 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
-from .models import Neo4jSession
 
 bootstrap = Bootstrap()
 moment = Moment()
-neo4j_db = Neo4jSession()
 
 
 def create_app(config_name):
@@ -15,7 +13,6 @@ def create_app(config_name):
     app.config['SECRET_KEY'] = 'hard to guess string'
     bootstrap.init_app(app)
     moment.init_app(app)
-    neo4j_db.init_app(app)
 
     # register blueprints
     from .main import main as main_blueprint
