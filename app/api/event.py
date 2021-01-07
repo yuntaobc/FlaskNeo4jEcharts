@@ -1,5 +1,5 @@
 from . import api
-from .. import neo4j_db
+from app.models import neo4j_db
 from flask import render_template, session, redirect, url_for
 from flask import Flask, g, Response, request
 # from ..models import neo4j_session
