@@ -1,7 +1,7 @@
 from . import api
 from app.models import neo4j_db
 from flask import render_template, session, redirect, url_for
-from flask import Flask, g, Response, request
+from flask import Flask, g, Response, request, current_app
 # from ..models import neo4j_session
 import json
 
