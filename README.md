@@ -110,3 +110,9 @@ USE this things:
 - Echarts
 
 
+
+### 启动
+
+```bash
+python3 manage.py runserver 
+```
